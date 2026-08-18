@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mdscript name="ptich_EVE_Spawner" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="md.xsd">
+  <cues>
+    <!-- Bootstrap: find Heretic's End and hand it to the persistent Data cue. -->
+    <cue name="Spawner" instantiate="true">
+      <conditions>
+        <event_cue_signalled cue="md.Setup.Start"/>
+        <check_value value="player.galaxy?"/>
+      </conditions>
+      <actions>
+        <find_sector name="$HereticsEnd" macro="macro.Cluster_31_Sector001_macro"/>
+        <do_if value="$HereticsEnd">
+          <signal_cue_instantly cue="Data" param="$HereticsEnd"/>
+        </do_if>
+      </actions>
+    </cue>
+
+    <!-- Persistent cue that owns all spawn state. -->
+    <cue name="Data" instantiate="true" namespace="this">
+      <conditions>
+        <event_cue_signalled/>
+      </conditions>
+      <actions>
+        <set_value name="$Sector" exact="event.param"/>
+        <set_value name="$Centre" exact="event.param.coreposition"/>
+
+        <set_value name="$GroupCounter" exact="0"/>
+        <set_value name="$ActiveGroups" exact="[]"/>
+        <set_value name="$NextSpawn" exact="player.age"/>
+
+        <!-- Global group that tracks every spawned pirate ship. -->
+        <create_group groupname="$AllPirates"/>
+        <set_value name="$PirateFactions" exact="[faction.eve_angel_cartel, faction.eve_blood_raiders, faction.eve_guristas_pirates, faction.eve_sanshas_nation]"/>
+
+        <!-- Base factions used as ship templates. DLC factions are added only if they are active in the current universe. -->
+        <set_value name="$TemplateFactions" exact="[faction.argon, faction.paranid, faction.teladi]"/>
+        <do_if value="faction.split.isactive">
+          <append_to_list name="$TemplateFactions" exact="faction.split"/>
+        </do_if>
+        <do_if value="faction.boron.isactive">
+          <append_to_list name="$TemplateFactions" exact="faction.boron"/>
+        </do_if>
+        <do_if value="faction.terran.isactive">
+          <append_to_list name="$TemplateFactions" exact="faction.terran"/>
+        </do_if>
+      </actions>
+      <cues>
+        <!-- Periodic spawn attempt. Check every 30 s; actual spawn no more than once per 30 s. -->
+        <cue name="SpawnTick" instantiate="true" checktime="30s" checkinterval="30s">
+          <conditions>
+            <check_value value="parent.$Sector.exists"/>
+            <check_value value="player.age ge parent.$NextSpawn"/>
+          </conditions>
+          <actions>
+            <!-- Count currently active groups. -->
+            <set_value name="$LiveCount" exact="0"/>
+            <do_for_each name="$Rec" in="parent.$ActiveGroups">
+              <do_if value="$Rec.$Group?">
+                <do_if value="$Rec.$Group.count gt 0">
+                  <set_value name="$LiveCount" operation="add" exact="1"/>
+                </do_if>
+              </do_if>
+            </do_for_each>
+
+            <!-- Keep at most 10 active groups to limit CPU load. -->
+            <do_if value="$LiveCount lt 10">
+              <find_station name="$Stations" space="parent.$Sector" multiple="true"/>
+
+              <!-- Try to find a spawn position near the sector centre, but not too close to stations or other groups. -->
+              <set_value name="$FoundPos" exact="false"/>
+              <set_value name="$Try" exact="0"/>
+              <do_while value="not $FoundPos and $Try lt 30">
+                <set_value name="$Try" operation="add" exact="1"/>
+                <set_value name="$Yaw" min="0deg" max="360deg"/>
+                <!-- Inner zone 0-200km: S/M only. Outer zone 200-400km: M/L/XL possible. -->
+                <set_value name="$Dist" min="10km" max="400km"/>
+                <get_safe_pos result="$TryPos" sector="parent.$Sector" x="parent.$Sector.coreposition.x + sin($Yaw) * $Dist" y="parent.$Sector.coreposition.y" z="parent.$Sector.coreposition.z + cos($Yaw) * $Dist" allowyaxis="false" radius="5km"/>
+
+                <set_value name="$TooClose" exact="false"/>
+                <do_if value="$Stations.count gt 0">
+                  <do_all exact="$Stations.count" counter="$s">
+                    <do_if value="not $TooClose and $Stations.{$s}.distanceto.[parent.$Sector, $TryPos] lt 25km">
+                      <set_value name="$TooClose" exact="true"/>
+                    </do_if>
+                  </do_all>
+                </do_if>
+
+                <do_if value="not $TooClose">
+                  <set_value name="$TryX" exact="$TryPos.x"/>
+                  <set_value name="$TryY" exact="$TryPos.y"/>
+                  <set_value name="$TryZ" exact="$TryPos.z"/>
+                  <do_for_each name="$Rec" in="parent.$ActiveGroups">
+                    <do_if value="$Rec.$X? and $Rec.$Y? and $Rec.$Z?">
+                      <set_value name="$DX" exact="$Rec.$X - $TryX"/>
+                      <set_value name="$DY" exact="$Rec.$Y - $TryY"/>
+                      <set_value name="$DZ" exact="$Rec.$Z - $TryZ"/>
+                      <set_value name="$Separation" exact="sqrt($DX * $DX + $DY * $DY + $DZ * $DZ)"/>
+                      <do_if value="not $TooClose and $Separation lt 60km">
+                        <set_value name="$TooClose" exact="true"/>
+                      </do_if>
+                    </do_if>
+                  </do_for_each>
+                </do_if>
+
+                <do_if value="not $TooClose">
+                  <set_value name="$BaseX" exact="$TryPos.x"/>
+                  <set_value name="$BaseY" exact="$TryPos.y"/>
+                  <set_value name="$BaseZ" exact="$TryPos.z"/>
+                  <set_value name="$FoundPos" exact="true"/>
+                </do_if>
+              </do_while>
+
+              <do_if value="$FoundPos">
+                <!-- Choose one pirate faction for this whole group. -->
+                <set_value name="$PirateFaction" exact="parent.$PirateFactions.random"/>
+                <!-- Random group size: 2-5 ships. -->
+                <set_value name="$GroupSize" min="2" max="5"/>
+                <!-- Zone decides whether big ships can appear. -->
+                <set_value name="$BigShipCount" exact="0"/>
+                <set_value name="$BigSize" exact="class.ship_l"/>
+                <do_if value="$Dist ge 200km">
+                  <!-- Outer zone: may spawn one L/XL ship. -->
+                  <set_value name="$BigShipCount" min="0" max="1"/>
+                  <do_if value="$BigShipCount == 1">
+                    <set_value name="$R" min="1" max="100"/>
+                    <do_if value="$R le 30">
+                      <set_value name="$BigSize" exact="class.ship_xl"/>
+                    </do_if>
+                  </do_if>
+                </do_if>
+
+                <set_value name="$GroupIndex" exact="parent.$GroupCounter + 1"/>
+                <set_value name="parent.$GroupCounter" exact="$GroupIndex"/>
+
+                <create_group groupname="$Group"/>
+
+                <set_value name="$Commander" exact="null"/>
+                <set_value name="$CommanderAssigned" exact="false"/>
+                <set_value name="$Leash" exact="20km"/>
+
+                <!-- Faction-specific paint for the whole group. -->
+                <set_value name="$PaintMod" exact="ware.paintmod_0099"/>
+                <do_if value="$PirateFaction == faction.eve_blood_raiders">
+                  <set_value name="$PaintMod" exact="ware.paintmod_0097"/>
+                </do_if>
+                <do_elseif value="$PirateFaction == faction.eve_guristas_pirates">
+                  <set_value name="$PaintMod" exact="ware.paintmod_0098"/>
+                </do_elseif>
+                <do_elseif value="$PirateFaction == faction.eve_sanshas_nation">
+                  <set_value name="$PaintMod" exact="ware.paintmod_0100"/>
+                </do_elseif>
+
+                <do_all exact="$GroupSize" counter="$i">
+                  <set_value name="$TemplateFaction" exact="parent.$TemplateFactions.random"/>
+
+                  <!-- First ship is always a combat-capable S/M escort. -->
+                  <do_if value="$i == 1">
+                    <set_value name="$R" min="1" max="100"/>
+                    <do_if value="$R le 60">
+                      <set_value name="$ShipSize" exact="class.ship_s"/>
+                    </do_if>
+                    <do_else>
+                      <set_value name="$ShipSize" exact="class.ship_m"/>
+                    </do_else>
+                  </do_if>
+                  <do_elseif value="$BigShipCount == 1 and $i == 2">
+                    <set_value name="$ShipSize" exact="$BigSize"/>
+                  </do_elseif>
+                  <do_else>
+                    <set_value name="$R" min="1" max="100"/>
+                    <do_if value="$R le 65">
+                      <set_value name="$ShipSize" exact="class.ship_s"/>
+                    </do_if>
+                    <do_else>
+                      <set_value name="$ShipSize" exact="class.ship_m"/>
+                    </do_else>
+                  </do_else>
+
+                  <get_safe_pos result="$ShipPos" sector="parent.$Sector" x="$BaseX" y="$BaseY" z="$BaseZ" radius="3km"/>
+                  <create_ship name="$Pirate" sector="parent.$Sector" capturable="false" groupname="$Group">
+                    <select faction="$TemplateFaction" size="$ShipSize"/>
+                    <owner exact="$PirateFaction" overridenpc="true"/>
+                    <pilot>
+                      <select race="$TemplateFaction.primaryrace" tags="tag.aipilot"/>
+                      <skills>
+                        <skill type="morale" exact="15"/>
+                        <skill type="piloting" exact="15"/>
+                      </skills>
+                    </pilot>
+                    <paint ware="$PaintMod"/>
+                    <safepos value="$ShipPos"/>
+                  </create_ship>
+
+                  <do_if value="$Pirate.exists">
+                    <set_known object="$Pirate" known="true"/>
+                    <add_to_group groupname="parent.$AllPirates" object="$Pirate"/>
+                    <add_effect object="$Pirate.zone" effect="'jump_jumpin_capship'">
+                      <position object="$Pirate"/>
+                    </add_effect>
+
+                    <do_if value="not $CommanderAssigned">
+                      <set_value name="$Commander" exact="$Pirate"/>
+                      <set_value name="$CommanderAssigned" exact="true"/>
+                      <create_order object="$Pirate" id="'AttackInRange'" immediate="true">
+                        <param name="destination" value="[parent.$Sector, position.[$BaseX, $BaseY, $BaseZ]]"/>
+                        <param name="radius" value="$Leash"/>
+                        <param name="pursuetargets" value="true"/>
+                        <param name="enforceradius" value="true"/>
+                      </create_order>
+                    </do_if>
+                    <do_else>
+                      <set_object_commander object="$Pirate" commander="$Commander" assignment="assignment.attack"/>
+                    </do_else>
+                  </do_if>
+                </do_all>
+
+                <!-- Store the group so we can keep groups spread out and clean up later. -->
+                <append_to_list name="parent.$ActiveGroups" exact="table[$X = $BaseX, $Y = $BaseY, $Z = $BaseZ, $Sector = parent.$Sector, $Faction = $PirateFaction, $Group = $Group]"/>
+                <set_value name="parent.$NextSpawn" exact="player.age + 30s"/>
+                <show_notification text="{35002,20}.[$PirateFaction.knownname, $Group.count, parent.$Sector.knownname]"/>
+              </do_if>
+            </do_if>
+          </actions>
+        </cue>
+
+        <!-- Cleanup: rebuild the active-groups list without destroyed groups. -->
+        <cue name="CleanupTick" instantiate="true" checktime="5min" checkinterval="5min">
+          <conditions>
+            <check_value value="parent.$ActiveGroups?"/>
+          </conditions>
+          <actions>
+            <set_value name="$NewActiveGroups" exact="[]"/>
+            <do_for_each name="$Rec" in="parent.$ActiveGroups">
+              <do_if value="$Rec.$Group?">
+                <do_if value="$Rec.$Group.count gt 0 and $Rec.$X? and $Rec.$Y? and $Rec.$Z?">
+                  <append_to_list name="$NewActiveGroups" exact="$Rec"/>
+                </do_if>
+              </do_if>
+            </do_for_each>
+            <set_value name="parent.$ActiveGroups" exact="$NewActiveGroups"/>
+          </actions>
+        </cue>
+
+        <!-- Hard leash: if any EVE pirate wanders far from its base, order it back. -->
+        <cue name="LeashTick" instantiate="true" checktime="30s" checkinterval="30s">
+          <conditions>
+            <check_value value="parent.$ActiveGroups?"/>
+          </conditions>
+          <actions>
+            <do_for_each name="$Rec" in="parent.$ActiveGroups">
+              <do_if value="$Rec.$Group?">
+                <do_if value="$Rec.$Group.count gt 0 and $Rec.$X? and $Rec.$Y? and $Rec.$Z? and $Rec.$Sector?">
+                  <do_all exact="$Rec.$Group.count" counter="$g">
+                    <set_value name="$P" exact="$Rec.$Group.{$g}"/>
+                    <do_if value="$P.exists and $P.distanceto.[$Rec.$Sector, position.[$Rec.$X, $Rec.$Y, $Rec.$Z]] gt 40km">
+                      <create_order object="$P" id="'AttackInRange'" immediate="true">
+                        <param name="destination" value="[$Rec.$Sector, position.[$Rec.$X, $Rec.$Y, $Rec.$Z]]"/>
+                        <param name="radius" value="20km"/>
+                        <param name="pursuetargets" value="true"/>
+                        <param name="enforceradius" value="true"/>
+                      </create_order>
+                    </do_if>
+                  </do_all>
+                </do_if>
+              </do_if>
+            </do_for_each>
+          </actions>
+        </cue>
+
+        <!-- Deserter cleanup: destroy EVE pirate ships that somehow leave Heretic's End. -->
+        <cue name="SectorCheck" instantiate="true" checktime="1min" checkinterval="1min">
+          <conditions>
+            <check_value value="parent.$AllPirates.count gt 0"/>
+          </conditions>
+          <actions>
+            <set_value name="$Sector" exact="parent.$Sector"/>
+            <set_value name="$AllPirates" exact="parent.$AllPirates"/>
+            <do_all exact="$AllPirates.count" counter="$i" reverse="true">
+              <set_value name="$P" exact="$AllPirates.{$i}"/>
+              <do_if value="$P.exists and $P.sector != $Sector">
+                <destroy_object object="$P" explosion="false"/>
+              </do_if>
+            </do_all>
+          </actions>
+        </cue>
+      </cues>
+    </cue>
+  </cues>
+</mdscript>

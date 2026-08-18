@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<content id="ws_3783359877" name="EVE Online in X4" description="Adds four EVE Online pirate factions (Angel Cartel, Blood Raiders, Guristas Pirates, Sansha's Nation) and a CONCORD bounty faction. Pirate groups spawn randomly in Heretic's End, attack only the player, and CONCORD pays bounties for every pirate ship destroyed. No stations are added for any of the new factions." author="ptich9km" version="200" date="2026-08-18" save="1">
+  <text language="44" name="EVE Online in X4" description="Adds four EVE Online pirate factions (Angel Cartel, Blood Raiders, Guristas Pirates, Sansha's Nation) and a CONCORD bounty faction. Pirate groups spawn randomly in Heretic's End, attack only the player, and CONCORD pays bounties for every pirate ship destroyed. No stations are added for any of the new factions."/>
+</content>

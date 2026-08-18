@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<diff>
+  <!-- Custom faction logos for the EVE Online in X4 mod.
+       Textures live in assets\textures\ui\factions and are referenced
+       by the faction definitions in libraries/factions.xml. -->
+  <add sel="/icons">
+    <icon name="faction_eve_angel_cartel" texture="assets\textures\ui\factions\faction_eve_angel_cartel.tga" height="128" width="128"/>
+    <icon name="faction_eve_blood_raiders" texture="assets\textures\ui\factions\faction_eve_blood_raiders.tga" height="128" width="128"/>
+    <icon name="faction_eve_guristas_pirates" texture="assets\textures\ui\factions\faction_eve_guristas_pirates.tga" height="128" width="128"/>
+    <icon name="faction_eve_sanshas_nation" texture="assets\textures\ui\factions\faction_eve_sanshas_nation.tga" height="128" width="128"/>
+    <icon name="faction_eve_concord" texture="assets\textures\ui\factions\faction_eve_concord.tga" height="128" width="128"/>
+  </add>
+</diff>

@@ -1,0 +1,9 @@
+# Generated distribution archives
+dist/
+
+# Temporary build output
+tmp/
+
+# IDE / OS
+.vscode/
+*.zip

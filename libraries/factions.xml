@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<diff>
+  <!-- EVE Online themed pirate factions and CONCORD police/bounty faction.
+       All new factions have NO stations. Pirates are hostile only to the player
+       and neutral to everyone else (including CONCORD), so they never attack
+       other NPC factions. Other NPC factions are neutral to the new factions,
+       so they do not help or attack them. -->
+
+  <!-- Add the new factions. Only base-game faction ids are listed here; DLC
+       factions are neutralised at gamestart by md/EVE_Init.xml. -->
+  <add sel="/factions">
+    <!-- Angel Cartel -->
+    <faction id="eve_angel_cartel" name="{35002,1}" description="{35002,2}" shortname="{35002,11}" prefixname="{35002,11}" primaryrace="argon" behaviourset="default">
+      <color ref="faction_buccaneers"/>
+      <icon active="faction_buccaneers" inactive="faction_buccaneers" banner="diplomacy_banner_buccaneers"/>
+      <relations locked="1">
+        <relation faction="player" relation="-1"/>
+        <relation faction="eve_blood_raiders" relation="0"/>
+        <relation faction="eve_guristas_pirates" relation="0"/>
+        <relation faction="eve_sanshas_nation" relation="0"/>
+        <relation faction="eve_concord" relation="0"/>
+        <relation faction="argon" relation="0"/>
+        <relation faction="antigone" relation="0"/>
+        <relation faction="alliance" relation="0"/>
+        <relation faction="hatikvah" relation="0"/>
+        <relation faction="paranid" relation="0"/>
+        <relation faction="holyorder" relation="0"/>
+        <relation faction="holyorderfanatic" relation="0"/>
+        <relation faction="teladi" relation="0"/>
+        <relation faction="ministry" relation="0"/>
+        <relation faction="scaleplate" relation="0"/>
+        <relation faction="buccaneers" relation="0"/>
+        <relation faction="civilian" relation="0"/>
+        <relation faction="criminal" relation="0"/>
+        <relation faction="khaak" relation="0"/>
+        <relation faction="outlaw" relation="0"/>
+        <relation faction="smuggler" relation="0"/>
+        <relation faction="trinity" relation="0"/>
+        <relation faction="visitor" relation="0"/>
+        <relation faction="xenon" relation="0"/>
+      </relations>
+    </faction>
+
+    <!-- Blood Raiders -->
+    <faction id="eve_blood_raiders" name="{35002,3}" description="{35002,4}" shortname="{35002,12}" prefixname="{35002,12}" primaryrace="paranid" behaviourset="default">
+      <color ref="faction_holyorderfanatic"/>
+      <icon active="faction_buccaneers" inactive="faction_buccaneers" banner="diplomacy_banner_holyorderfanatic"/>
+      <relations locked="1">
+        <relation faction="player" relation="-1"/>
+        <relation faction="eve_angel_cartel" relation="0"/>
+        <relation faction="eve_guristas_pirates" relation="0"/>
+        <relation faction="eve_sanshas_nation" relation="0"/>
+        <relation faction="eve_concord" relation="0"/>
+        <relation faction="argon" relation="0"/>
+        <relation faction="antigone" relation="0"/>
+        <relation faction="alliance" relation="0"/>
+        <relation faction="hatikvah" relation="0"/>
+        <relation faction="paranid" relation="0"/>
+        <relation faction="holyorder" relation="0"/>
+        <relation faction="holyorderfanatic" relation="0"/>
+        <relation faction="teladi" relation="0"/>
+        <relation faction="ministry" relation="0"/>
+        <relation faction="scaleplate" relation="0"/>
+        <relation faction="buccaneers" relation="0"/>
+        <relation faction="civilian" relation="0"/>
+        <relation faction="criminal" relation="0"/>
+        <relation faction="khaak" relation="0"/>
+        <relation faction="outlaw" relation="0"/>
+        <relation faction="smuggler" relation="0"/>
+        <relation faction="trinity" relation="0"/>
+        <relation faction="visitor" relation="0"/>
+        <relation faction="xenon" relation="0"/>
+      </relations>
+    </faction>
+
+    <!-- Guristas Pirates -->
+    <faction id="eve_guristas_pirates" name="{35002,5}" description="{35002,6}" shortname="{35002,13}" prefixname="{35002,13}" primaryrace="teladi" behaviourset="default">
+      <color ref="faction_scaleplate"/>
+      <icon active="faction_buccaneers" inactive="faction_buccaneers" banner="diplomacy_banner_scaleplate"/>
+      <relations locked="1">
+        <relation faction="player" relation="-1"/>
+        <relation faction="eve_angel_cartel" relation="0"/>
+        <relation faction="eve_blood_raiders" relation="0"/>
+        <relation faction="eve_sanshas_nation" relation="0"/>
+        <relation faction="eve_concord" relation="0"/>
+        <relation faction="argon" relation="0"/>
+        <relation faction="antigone" relation="0"/>
+        <relation faction="alliance" relation="0"/>
+        <relation faction="hatikvah" relation="0"/>
+        <relation faction="paranid" relation="0"/>
+        <relation faction="holyorder" relation="0"/>
+        <relation faction="holyorderfanatic" relation="0"/>
+        <relation faction="teladi" relation="0"/>
+        <relation faction="ministry" relation="0"/>
+        <relation faction="scaleplate" relation="0"/>
+        <relation faction="buccaneers" relation="0"/>
+        <relation faction="civilian" relation="0"/>
+        <relation faction="criminal" relation="0"/>
+        <relation faction="khaak" relation="0"/>
+        <relation faction="outlaw" relation="0"/>
+        <relation faction="smuggler" relation="0"/>
+        <relation faction="trinity" relation="0"/>
+        <relation faction="visitor" relation="0"/>
+        <relation faction="xenon" relation="0"/>
+      </relations>
+    </faction>
+
+    <!-- Sansha's Nation -->
+    <faction id="eve_sanshas_nation" name="{35002,7}" description="{35002,8}" shortname="{35002,14}" prefixname="{35002,14}" primaryrace="paranid" behaviourset="default">
+      <color ref="faction_khaak"/>
+      <icon active="faction_buccaneers" inactive="faction_buccaneers" banner="diplomacy_banner_khaak"/>
+      <relations locked="1">
+        <relation faction="player" relation="-1"/>
+        <relation faction="eve_angel_cartel" relation="0"/>
+        <relation faction="eve_blood_raiders" relation="0"/>
+        <relation faction="eve_guristas_pirates" relation="0"/>
+        <relation faction="eve_concord" relation="0"/>
+        <relation faction="argon" relation="0"/>
+        <relation faction="antigone" relation="0"/>
+        <relation faction="alliance" relation="0"/>
+        <relation faction="hatikvah" relation="0"/>
+        <relation faction="paranid" relation="0"/>
+        <relation faction="holyorder" relation="0"/>
+        <relation faction="holyorderfanatic" relation="0"/>
+        <relation faction="teladi" relation="0"/>
+        <relation faction="ministry" relation="0"/>
+        <relation faction="scaleplate" relation="0"/>
+        <relation faction="buccaneers" relation="0"/>
+        <relation faction="civilian" relation="0"/>
+        <relation faction="criminal" relation="0"/>
+        <relation faction="khaak" relation="0"/>
+        <relation faction="outlaw" relation="0"/>
+        <relation faction="smuggler" relation="0"/>
+        <relation faction="trinity" relation="0"/>
+        <relation faction="visitor" relation="0"/>
+        <relation faction="xenon" relation="0"/>
+      </relations>
+    </faction>
+
+    <!-- CONCORD bounty/police faction (pays the player for destroying pirate ships) -->
+    <faction id="eve_concord" name="{35002,9}" description="{35002,10}" shortname="{35002,15}" prefixname="{35002,15}" primaryrace="argon" behaviourset="default" tags="police">
+      <color ref="faction_argon"/>
+      <icon active="faction_buccaneers" inactive="faction_buccaneers" banner="diplomacy_banner_argon"/>
+      <relations locked="1">
+        <relation faction="player" relation="0.5"/>
+        <relation faction="eve_angel_cartel" relation="0"/>
+        <relation faction="eve_blood_raiders" relation="0"/>
+        <relation faction="eve_guristas_pirates" relation="0"/>
+        <relation faction="eve_sanshas_nation" relation="0"/>
+        <relation faction="argon" relation="0"/>
+        <relation faction="antigone" relation="0"/>
+        <relation faction="alliance" relation="0"/>
+        <relation faction="hatikvah" relation="0"/>
+        <relation faction="paranid" relation="0"/>
+        <relation faction="holyorder" relation="0"/>
+        <relation faction="holyorderfanatic" relation="0"/>
+        <relation faction="teladi" relation="0"/>
+        <relation faction="ministry" relation="0"/>
+        <relation faction="scaleplate" relation="0"/>
+        <relation faction="buccaneers" relation="0"/>
+        <relation faction="civilian" relation="0"/>
+        <relation faction="criminal" relation="0"/>
+        <relation faction="khaak" relation="0"/>
+        <relation faction="outlaw" relation="0"/>
+        <relation faction="smuggler" relation="0"/>
+        <relation faction="trinity" relation="0"/>
+        <relation faction="visitor" relation="0"/>
+        <relation faction="xenon" relation="0"/>
+      </relations>
+    </faction>
+  </add>
+
+  <!-- Player relations: hostile to all pirate factions, friendly to CONCORD -->
+  <add sel="/factions/faction[@id='player']/relations">
+    <relation faction="eve_angel_cartel" relation="-1"/>
+    <relation faction="eve_blood_raiders" relation="-1"/>
+    <relation faction="eve_guristas_pirates" relation="-1"/>
+    <relation faction="eve_sanshas_nation" relation="-1"/>
+    <relation faction="eve_concord" relation="0.5"/>
+  </add>
+</diff>

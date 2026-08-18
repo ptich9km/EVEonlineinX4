@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mdscript name="ptich_EVE_Init" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="md.xsd">
+  <cues>
+    <!-- Initialize/force relations for all present factions at gamestart.
+         DLC factions are neutralised here even if they are not listed in libraries/factions.xml. -->
+    <cue name="InitRelations" instantiate="true">
+      <conditions>
+        <event_cue_signalled cue="md.Setup.Start"/>
+        <check_value value="player.galaxy?"/>
+      </conditions>
+      <actions>
+        <set_value name="$EVEFactions" exact="[faction.eve_angel_cartel, faction.eve_blood_raiders, faction.eve_guristas_pirates, faction.eve_sanshas_nation, faction.eve_concord]"/>
+        <set_value name="$PirateFactions" exact="[faction.eve_angel_cartel, faction.eve_blood_raiders, faction.eve_guristas_pirates, faction.eve_sanshas_nation]"/>
+
+        <do_for_each name="$EVEFaction" in="$EVEFactions">
+          <do_for_each name="$OtherFaction" in="lookup.faction.list">
+            <do_if value="$OtherFaction != faction.player and not $EVEFactions.indexof.{$OtherFaction}">
+              <set_faction_relation faction="$EVEFaction" otherfaction="$OtherFaction" value="0.0"/>
+            </do_if>
+          </do_for_each>
+        </do_for_each>
+
+        <!-- Pirates are hostile only to the player; CONCORD is friendly to the player. -->
+        <do_for_each name="$PirateFaction" in="$PirateFactions">
+          <set_faction_relation faction="$PirateFaction" otherfaction="faction.player" value="-1.0"/>
+        </do_for_each>
+        <set_faction_relation faction="faction.eve_concord" otherfaction="faction.player" value="0.5"/>
+      </actions>
+    </cue>
+  </cues>
+</mdscript>
