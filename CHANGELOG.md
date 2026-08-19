@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.10] - 2026-08-20
+
+### Added
+- **Loadout presets** for pirate groups:
+  - **Pirate** (Low, 40% chance): weak loadout (0.15–0.35), 50% bounty.
+  - **Soldier** (Medium, 40% chance): standard loadout (0.45–0.65), 100% bounty.
+  - **Officer** (High, 20% chance): elite loadout (0.80–1.00), 200% bounty.
+- Preset is shown as a prefix in the ship name on the map (e.g. `Pirate Nova`, `Soldier Minotaur`, `Officer Behemoth`).
+- CONCORD bounty notification now includes the preset prefix.
+
+### Changed
+- Moved bounty logic into `md/EVE_Spawner.xml` so it can read the per-ship preset table reliably.
+- Removed standalone `md/EVE_Bounty.xml`.
+
 ## [2.00] - 2026-08-18
 
 ### Added
