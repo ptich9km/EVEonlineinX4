@@ -1,5 +1,27 @@
 # Changelog
 
+## [2.13] - 2026-08-20
+
+### Changed
+- **Officer and named-officer fleets now use military-only ship definitions** via `get_ship_definition` with `tag.military`.
+- **Named officer fleets** (8–12 ships) now always spawn:
+  - XL military flagship.
+  - L military heavy ship.
+  - Extra random L/XL military ships in slots 3–4.
+  - Remaining slots are random military S/M/L ships.
+- **High-preset officer groups** (2–5 ships) now always include at least one L/XL military ship; first ship is always a military S/M escort.
+- Civilian/builder/supply XL ships can no longer appear as named-officer flagships.
+
+## [2.12] - 2026-08-20
+
+### Changed
+- **Loot drops now behave like normal ship loot**: mod parts spawn as collectable containers in space at the wreck's location instead of being added directly to the player inventory.
+- **Loot is restricted to officer/named-officer fleets** spawned by the mod:
+  - Regular EVE pirate groups no longer drop mod parts.
+  - Officer fleets (`Officer` / named-officer prefix) have a 60% base chance to drop one mod part.
+  - Debug flag forces a 100% drop chance for testing.
+- `md/EVE_Spawner.xml` now stores an `$IsOfficer` flag for every spawned ship so `md/EVE_Loot.xml` can identify officer kills reliably.
+
 ## [2.11] - 2026-08-20
 
 ### Added

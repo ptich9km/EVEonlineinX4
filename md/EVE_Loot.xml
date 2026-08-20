@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mdscript name="ptich_EVE_Loot" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="md.xsd">
   <cues>
-    <!-- Drop a random ship mod part when the player destroys an EVE pirate ship. -->
+    <!-- Drop a ship mod part in space when the player destroys an EVE officer-class ship. -->
     <cue name="LootListener" instantiate="true">
       <conditions>
         <event_player_owned_killed_object/>
@@ -13,41 +13,76 @@
         </check_any>
       </conditions>
       <actions>
-        <!-- DEBUG: set to true to force every kill to drop loot. -->
-        <set_value name="$DebugMode" exact="false"/>
-        <!-- Base loot drop chance (percent). Debug forces 100. -->
-        <set_value name="$LootChance" exact="15"/>
+        <!-- DEBUG: set to true to force every qualifying officer kill to drop loot. -->
+        <set_value name="$DebugMode" exact="true"/>
+        <!-- Base loot drop chance (percent) for officer/named-officer spawns. -->
+        <set_value name="$LootChance" exact="60"/>
         <do_if value="$DebugMode">
           <set_value name="$LootChance" exact="100"/>
         </do_if>
 
         <set_value name="$Victim" exact="event.param2"/>
-        <set_value name="$Roll" min="1" max="100"/>
-        <do_if value="$Roll le $LootChance">
-          <set_value name="$LootTable" exact="[
-            ware.modpart_enginefuelinjector_t1,
-            ware.modpart_shieldgeneratorcoil_t1,
-            ware.modpart_shipnanoweave_t1,
-            ware.modpart_weaponchamber_t1,
-            ware.modpart_enginefuelinjector_t2,
-            ware.modpart_shieldgeneratorcoil_t2,
-            ware.modpart_shipnanoweave_t2,
-            ware.modpart_weaponchamber_t2,
-            ware.modpart_enginefuelinjector_t3,
-            ware.modpart_shieldgeneratorcoil_t3,
-            ware.modpart_shipnanoweave_t3,
-            ware.modpart_weaponchamber_t3,
-            ware.modpart_extendedfuelcontainer,
-            ware.modpart_nividiumoxide,
-            ware.modpart_tuningsoftware
-          ]"/>
-          <set_value name="$LootWare" exact="$LootTable.random"/>
-          <add_inventory entity="player.entity" ware="$LootWare" exact="1"/>
-          <show_notification text="{35002,50}.[$Victim.owner.knownname, $LootWare.name]"/>
-          <debug_text text="'EVE Loot: dropped ' + $LootWare + ' from ' + $Victim.knownname" context="false" filter="scripts"/>
+        <set_value name="$VictimSector" exact="$Victim.sector"/>
+        <set_value name="$VictimPos" exact="$Victim.position"/>
+
+        <!-- Only drop from ships spawned by EVE_Spawner that are flagged as officer fleets. -->
+        <do_if value="@md.ptich_EVE_Spawner.Data.$ShipPresets.{$Victim}.$IsOfficer == true">
+          <set_value name="$Roll" min="1" max="100"/>
+          <do_if value="$Roll le $LootChance">
+            <!-- Rare T1 parts -->
+            <set_value name="$LootTableT1" exact="[
+              ware.modpart_enginefuelinjector_t1,
+              ware.modpart_shieldgeneratorcoil_t1,
+              ware.modpart_shipnanoweave_t1,
+              ware.modpart_weaponchamber_t1
+            ]"/>
+            <!-- Rare T2/T3 parts -->
+            <set_value name="$LootTableT2" exact="[
+              ware.modpart_enginefuelinjector_t2,
+              ware.modpart_shieldgeneratorcoil_t2,
+              ware.modpart_shipnanoweave_t2,
+              ware.modpart_weaponchamber_t2,
+              ware.modpart_enginefuelinjector_t3,
+              ware.modpart_shieldgeneratorcoil_t3,
+              ware.modpart_shipnanoweave_t3,
+              ware.modpart_weaponchamber_t3
+            ]"/>
+            <!-- Common enhancement parts -->
+            <set_value name="$LootTableCommon" exact="[
+              ware.modpart_extendedfuelcontainer,
+              ware.modpart_nividiumoxide,
+              ware.modpart_tuningsoftware
+            ]"/>
+
+            <!-- Choose rarity tier: 30% T1, 20% T2/T3, 50% common. -->
+            <set_value name="$TierRoll" min="1" max="100"/>
+            <do_if value="$TierRoll le 30">
+              <set_value name="$LootWare" exact="$LootTableT1.random"/>
+              <set_value name="$CrateMacro" exact="macro.sm_gen_wpsmod_rare_01_macro"/>
+            </do_if>
+            <do_elseif value="$TierRoll le 50">
+              <set_value name="$LootWare" exact="$LootTableT2.random"/>
+              <set_value name="$CrateMacro" exact="macro.sm_gen_wpsmod_rare_02_macro"/>
+            </do_elseif>
+            <do_else>
+              <set_value name="$LootWare" exact="$LootTableCommon.random"/>
+              <set_value name="$CrateMacro" exact="macro.sm_gen_wpsmod_common_01_macro"/>
+            </do_else>
+
+            <!-- Spawn a standard collectable loot container at the wreck's location. -->
+            <create_object name="$LootCrate" macro="$CrateMacro" sector="$VictimSector" owner="faction.ownerless">
+              <position value="$VictimPos"/>
+            </create_object>
+            <add_cargo object="$LootCrate" ware="$LootWare" exact="1"/>
+            <show_notification text="{35002,50}.[$Victim.owner.knownname, $LootWare.name]"/>
+            <debug_text text="'EVE Loot: dropped ' + $LootWare + ' in ' + $LootCrate + ' at ' + $VictimPos" context="false" filter="scripts"/>
+          </do_if>
+          <do_else>
+            <debug_text text="'EVE Loot: officer kill but no drop (roll ' + $Roll + ' > ' + $LootChance + ')'" context="false" filter="scripts"/>
+          </do_else>
         </do_if>
         <do_else>
-          <debug_text text="'EVE Loot: no drop from ' + $Victim.knownname + ' (roll ' + $Roll + ' > ' + $LootChance + ')'" context="false" filter="scripts"/>
+          <debug_text text="'EVE Loot: victim ' + $Victim.knownname + ' is not an officer spawn. No mod-part drop.'" context="false" filter="scripts"/>
         </do_else>
       </actions>
     </cue>

@@ -178,7 +178,15 @@
                   <!-- Zone decides whether big ships can appear. -->
                   <set_value name="$BigShipCount" exact="0"/>
                   <set_value name="$BigSize" exact="class.ship_l"/>
-                  <do_if value="$Dist ge 200km">
+                  <do_if value="$GroupPreset == 'high'">
+                    <!-- Officer-grade groups always contain at least one big military ship. -->
+                    <set_value name="$BigShipCount" exact="1"/>
+                    <set_value name="$R" min="1" max="100"/>
+                    <do_if value="$R le 30">
+                      <set_value name="$BigSize" exact="class.ship_xl"/>
+                    </do_if>
+                  </do_if>
+                  <do_elseif value="$Dist ge 200km">
                     <!-- Outer zone: may spawn one L/XL ship. -->
                     <set_value name="$BigShipCount" min="0" max="1"/>
                     <do_if value="$BigShipCount == 1">
@@ -187,7 +195,7 @@
                         <set_value name="$BigSize" exact="class.ship_xl"/>
                       </do_if>
                     </do_if>
-                  </do_if>
+                  </do_elseif>
                 </do_else>
 
                 <set_value name="$GroupIndex" exact="parent.$GroupCounter + 1"/>
@@ -213,24 +221,46 @@
 
                 <do_all exact="$GroupSize" counter="$i">
                   <set_value name="$TemplateFaction" exact="parent.$TemplateFactions.random"/>
+                  <set_value name="$ShipSize" exact="class.ship_s"/>
+                  <set_value name="$ShipDef" exact="null"/>
+                  <set_value name="$UseRef" exact="false"/>
 
                   <do_if value="$IsOfficer">
-                    <!-- Officer fleet: XL flagship leads, next two are escorts, rest mixed. -->
+                    <!-- Named officer fleet: XL military flagship + L military heavy + mixed military escorts. -->
                     <do_if value="$i == 1">
-                      <set_value name="$ShipSize" exact="class.ship_xl"/>
+                      <get_ship_definition reference="$ShipDef" faction="$TemplateFaction" size="class.ship_xl" tags="tag.military"/>
+                      <do_if value="not $ShipDef">
+                        <get_ship_definition reference="$ShipDef" faction="$TemplateFaction" size="class.ship_xl"/>
+                      </do_if>
                     </do_if>
-                    <do_elseif value="$i le 3">
+                    <do_elseif value="$i == 2">
+                      <get_ship_definition reference="$ShipDef" faction="$TemplateFaction" size="class.ship_l" tags="tag.military"/>
+                      <do_if value="not $ShipDef">
+                        <get_ship_definition reference="$ShipDef" faction="$TemplateFaction" size="class.ship_l"/>
+                      </do_if>
+                    </do_elseif>
+                    <do_elseif value="$i le 4">
                       <set_value name="$R" min="1" max="100"/>
-                      <do_if value="$R le 60">
+                      <do_if value="$R le 25">
                         <set_value name="$ShipSize" exact="class.ship_s"/>
                       </do_if>
-                      <do_else>
+                      <do_elseif value="$R le 50">
                         <set_value name="$ShipSize" exact="class.ship_m"/>
+                      </do_elseif>
+                      <do_elseif value="$R le 80">
+                        <set_value name="$ShipSize" exact="class.ship_l"/>
+                      </do_elseif>
+                      <do_else>
+                        <set_value name="$ShipSize" exact="class.ship_xl"/>
                       </do_else>
+                      <get_ship_definition reference="$ShipDef" faction="$TemplateFaction" size="$ShipSize" tags="tag.military"/>
+                      <do_if value="not $ShipDef">
+                        <get_ship_definition reference="$ShipDef" faction="$TemplateFaction" size="$ShipSize"/>
+                      </do_if>
                     </do_elseif>
                     <do_else>
                       <set_value name="$R" min="1" max="100"/>
-                      <do_if value="$R le 45">
+                      <do_if value="$R le 40">
                         <set_value name="$ShipSize" exact="class.ship_s"/>
                       </do_if>
                       <do_elseif value="$R le 80">
@@ -239,10 +269,51 @@
                       <do_else>
                         <set_value name="$ShipSize" exact="class.ship_l"/>
                       </do_else>
+                      <get_ship_definition reference="$ShipDef" faction="$TemplateFaction" size="$ShipSize" tags="tag.military"/>
+                      <do_if value="not $ShipDef">
+                        <get_ship_definition reference="$ShipDef" faction="$TemplateFaction" size="$ShipSize"/>
+                      </do_if>
                     </do_else>
+                    <do_if value="$ShipDef">
+                      <set_value name="$UseRef" exact="true"/>
+                    </do_if>
                   </do_if>
+                  <do_elseif value="$GroupPreset == 'high'">
+                    <!-- High-grade officer group: guaranteed one L/XL military ship plus military escorts. -->
+                    <do_if value="$i == 1">
+                      <set_value name="$R" min="1" max="100"/>
+                      <do_if value="$R le 40">
+                        <set_value name="$ShipSize" exact="class.ship_m"/>
+                      </do_if>
+                      <do_else>
+                        <set_value name="$ShipSize" exact="class.ship_s"/>
+                      </do_else>
+                      <get_ship_definition reference="$ShipDef" faction="$TemplateFaction" size="$ShipSize" tags="tag.military"/>
+                      <do_if value="not $ShipDef">
+                        <set_value name="$ShipSize" exact="class.ship_m"/>
+                      </do_if>
+                    </do_if>
+                    <do_elseif value="$BigShipCount == 1 and $i == 2">
+                      <get_ship_definition reference="$ShipDef" faction="$TemplateFaction" size="$BigSize" tags="tag.military"/>
+                      <do_if value="not $ShipDef">
+                        <get_ship_definition reference="$ShipDef" faction="$TemplateFaction" size="$BigSize"/>
+                      </do_if>
+                    </do_elseif>
+                    <do_else>
+                      <set_value name="$R" min="1" max="100"/>
+                      <do_if value="$R le 65">
+                        <set_value name="$ShipSize" exact="class.ship_s"/>
+                      </do_if>
+                      <do_else>
+                        <set_value name="$ShipSize" exact="class.ship_m"/>
+                      </do_else>
+                    </do_else>
+                    <do_if value="$ShipDef">
+                      <set_value name="$UseRef" exact="true"/>
+                    </do_if>
+                  </do_elseif>
                   <do_else>
-                    <!-- First ship is always a combat-capable S/M escort. -->
+                    <!-- Low/medium presets: use vanilla selection. -->
                     <do_if value="$i == 1">
                       <set_value name="$R" min="1" max="100"/>
                       <do_if value="$R le 60">
@@ -267,34 +338,61 @@
                   </do_else>
 
                   <get_safe_pos result="$ShipPos" sector="parent.$Sector" x="$BaseX" y="$BaseY" z="$BaseZ" radius="3km"/>
-                  <create_ship name="$Pirate" sector="parent.$Sector" capturable="false" groupname="$Group">
-                    <select faction="$TemplateFaction" size="$ShipSize"/>
-                    <owner exact="$PirateFaction" overridenpc="true"/>
-                    <pilot>
-                      <select race="$TemplateFaction.primaryrace" tags="tag.aipilot"/>
-                      <skills>
-                        <do_if value="$IsOfficer">
-                          <skill type="morale" exact="30"/>
-                          <skill type="piloting" exact="30"/>
-                          <skill type="engineering" exact="25"/>
-                        </do_if>
-                        <do_else>
-                          <skill type="morale" exact="15"/>
-                          <skill type="piloting" exact="15"/>
-                        </do_else>
-                      </skills>
-                    </pilot>
-                    <paint ware="$PaintMod"/>
-                    <safepos value="$ShipPos"/>
-                    <loadout>
-                      <level min="$LoadoutMin" max="$LoadoutMax" variation="0.1" faction="$TemplateFaction"/>
-                    </loadout>
-                  </create_ship>
+
+                  <do_if value="$UseRef">
+                    <create_ship name="$Pirate" sector="parent.$Sector" capturable="false" groupname="$Group" ref="$ShipDef">
+                      <owner exact="$PirateFaction" overridenpc="true"/>
+                      <pilot>
+                        <select race="$TemplateFaction.primaryrace" tags="tag.aipilot"/>
+                        <skills>
+                          <do_if value="$IsOfficer">
+                            <skill type="morale" exact="30"/>
+                            <skill type="piloting" exact="30"/>
+                            <skill type="engineering" exact="25"/>
+                          </do_if>
+                          <do_else>
+                            <skill type="morale" exact="15"/>
+                            <skill type="piloting" exact="15"/>
+                          </do_else>
+                        </skills>
+                      </pilot>
+                      <paint ware="$PaintMod"/>
+                      <safepos value="$ShipPos"/>
+                      <loadout>
+                        <level min="$LoadoutMin" max="$LoadoutMax" variation="0.1" faction="$TemplateFaction"/>
+                      </loadout>
+                    </create_ship>
+                  </do_if>
+                  <do_else>
+                    <create_ship name="$Pirate" sector="parent.$Sector" capturable="false" groupname="$Group">
+                      <select faction="$TemplateFaction" size="$ShipSize"/>
+                      <owner exact="$PirateFaction" overridenpc="true"/>
+                      <pilot>
+                        <select race="$TemplateFaction.primaryrace" tags="tag.aipilot"/>
+                        <skills>
+                          <do_if value="$IsOfficer">
+                            <skill type="morale" exact="30"/>
+                            <skill type="piloting" exact="30"/>
+                            <skill type="engineering" exact="25"/>
+                          </do_if>
+                          <do_else>
+                            <skill type="morale" exact="15"/>
+                            <skill type="piloting" exact="15"/>
+                          </do_else>
+                        </skills>
+                      </pilot>
+                      <paint ware="$PaintMod"/>
+                      <safepos value="$ShipPos"/>
+                      <loadout>
+                        <level min="$LoadoutMin" max="$LoadoutMax" variation="0.1" faction="$TemplateFaction"/>
+                      </loadout>
+                    </create_ship>
+                  </do_else>
 
                   <do_if value="$Pirate.exists">
                     <set_known object="$Pirate" known="true"/>
                     <set_object_name object="$Pirate" name="$NamePrefix + ' ' + $Pirate.knownname"/>
-                    <set_value name="parent.$ShipPresets.{$Pirate}" exact="table[$BountyPercent = $BountyPercent, $Prefix = $NamePrefix]"/>
+                    <set_value name="parent.$ShipPresets.{$Pirate}" exact="table[$BountyPercent = $BountyPercent, $Prefix = $NamePrefix, $IsOfficer = $IsOfficer]"/>
                     <add_to_group groupname="parent.$AllPirates" object="$Pirate"/>
                     <add_effect object="$Pirate.zone" effect="'jump_jumpin_capship'">
                       <position object="$Pirate"/>
