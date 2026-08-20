@@ -35,6 +35,22 @@
         <set_value name="$ShipPresets" exact="table[]"/>
         <set_value name="$PirateFactions" exact="[faction.eve_angel_cartel, faction.eve_blood_raiders, faction.eve_guristas_pirates, faction.eve_sanshas_nation]"/>
 
+        <!-- DEBUG: set to true to force rare officer fleets and max loot chance for testing. -->
+        <set_value name="$DebugMode" exact="false"/>
+        <!-- Officer fleet spawn chance (percent). Debug forces 100. -->
+        <set_value name="$OfficerSpawnChance" exact="5"/>
+        <do_if value="$DebugMode">
+          <set_value name="$OfficerSpawnChance" exact="100"/>
+        </do_if>
+
+        <!-- Named officer lists per faction. -->
+        <set_value name="$OfficerNames" exact="table[
+          {faction.eve_angel_cartel} = ['Domni Avasarala','Kaleo Vex','Seraph Rade','Mira Tokk','Vance Korr'],
+          {faction.eve_blood_raiders} = ['Arak Nirak','Thal Vorr','Korvin Ash','Sister Malach','Brother Dren'],
+          {faction.eve_guristas_pirates} = ['Kopri Vaan','Telos Rix','Mako Yeng','Sera Dunn','Vex Halon'],
+          {faction.eve_sanshas_nation} = ['Warden Theta','True Slave-7','Herald Vak','Pure Form-12','Speaker Null']
+        ]"/>
+
         <!-- Base factions used as ship templates. DLC factions are added only if they are active in the current universe. -->
         <set_value name="$TemplateFactions" exact="[faction.argon, faction.paranid, faction.teladi]"/>
         <do_if value="faction.split.isactive">
@@ -114,47 +130,65 @@
               </do_while>
 
               <do_if value="$FoundPos">
-                <!-- Choose the group preset: Low / Medium / High. -->
-                <set_value name="$PresetRoll" min="1" max="100"/>
-                <do_if value="$PresetRoll le 40">
-                  <set_value name="$GroupPreset" exact="'low'"/>
-                  <set_value name="$LoadoutMin" exact="0.15"/>
-                  <set_value name="$LoadoutMax" exact="0.35"/>
-                  <set_value name="$NamePrefix" exact="'Pirate'"/>
-                  <set_value name="$BountyPercent" exact="50"/>
-                </do_if>
-                <do_elseif value="$PresetRoll le 80">
-                  <set_value name="$GroupPreset" exact="'medium'"/>
-                  <set_value name="$LoadoutMin" exact="0.45"/>
-                  <set_value name="$LoadoutMax" exact="0.65"/>
-                  <set_value name="$NamePrefix" exact="'Soldier'"/>
-                  <set_value name="$BountyPercent" exact="100"/>
-                </do_elseif>
-                <do_else>
-                  <set_value name="$GroupPreset" exact="'high'"/>
-                  <set_value name="$LoadoutMin" exact="0.80"/>
-                  <set_value name="$LoadoutMax" exact="1.00"/>
-                  <set_value name="$NamePrefix" exact="'Officer'"/>
-                  <set_value name="$BountyPercent" exact="200"/>
-                </do_else>
-
                 <!-- Choose one pirate faction for this whole group. -->
                 <set_value name="$PirateFaction" exact="parent.$PirateFactions.random"/>
-                <!-- Random group size: 2-5 ships. -->
-                <set_value name="$GroupSize" min="2" max="5"/>
-                <!-- Zone decides whether big ships can appear. -->
-                <set_value name="$BigShipCount" exact="0"/>
-                <set_value name="$BigSize" exact="class.ship_l"/>
-                <do_if value="$Dist ge 200km">
-                  <!-- Outer zone: may spawn one L/XL ship. -->
-                  <set_value name="$BigShipCount" min="0" max="1"/>
-                  <do_if value="$BigShipCount == 1">
-                    <set_value name="$R" min="1" max="100"/>
-                    <do_if value="$R le 30">
-                      <set_value name="$BigSize" exact="class.ship_xl"/>
+
+                <!-- Rare named officer fleet? -->
+                <set_value name="$IsOfficer" exact="false"/>
+                <set_value name="$OfficerRoll" min="1" max="100"/>
+                <do_if value="$OfficerRoll le parent.$OfficerSpawnChance">
+                  <set_value name="$IsOfficer" exact="true"/>
+                  <set_value name="$GroupPreset" exact="'officer'"/>
+                  <set_value name="$LoadoutMin" exact="0.85"/>
+                  <set_value name="$LoadoutMax" exact="1.00"/>
+                  <set_value name="$OfficerName" exact="parent.$OfficerNames.{$PirateFaction}.random"/>
+                  <set_value name="$NamePrefix" exact="$OfficerName"/>
+                  <set_value name="$BountyPercent" exact="400"/>
+                  <set_value name="$GroupSize" min="8" max="12"/>
+                  <set_value name="$BigShipCount" exact="0"/>
+                  <debug_text text="'EVE Officer fleet spawned: ' + $OfficerName + ' (' + $PirateFaction.knownname + ')'" context="false" filter="scripts"/>
+                </do_if>
+                <do_else>
+                  <!-- Choose the group preset: Low / Medium / High. -->
+                  <set_value name="$PresetRoll" min="1" max="100"/>
+                  <do_if value="$PresetRoll le 40">
+                    <set_value name="$GroupPreset" exact="'low'"/>
+                    <set_value name="$LoadoutMin" exact="0.15"/>
+                    <set_value name="$LoadoutMax" exact="0.35"/>
+                    <set_value name="$NamePrefix" exact="'Pirate'"/>
+                    <set_value name="$BountyPercent" exact="50"/>
+                  </do_if>
+                  <do_elseif value="$PresetRoll le 80">
+                    <set_value name="$GroupPreset" exact="'medium'"/>
+                    <set_value name="$LoadoutMin" exact="0.45"/>
+                    <set_value name="$LoadoutMax" exact="0.65"/>
+                    <set_value name="$NamePrefix" exact="'Soldier'"/>
+                    <set_value name="$BountyPercent" exact="100"/>
+                  </do_elseif>
+                  <do_else>
+                    <set_value name="$GroupPreset" exact="'high'"/>
+                    <set_value name="$LoadoutMin" exact="0.80"/>
+                    <set_value name="$LoadoutMax" exact="1.00"/>
+                    <set_value name="$NamePrefix" exact="'Officer'"/>
+                    <set_value name="$BountyPercent" exact="200"/>
+                  </do_else>
+
+                  <!-- Random group size: 2-5 ships. -->
+                  <set_value name="$GroupSize" min="2" max="5"/>
+                  <!-- Zone decides whether big ships can appear. -->
+                  <set_value name="$BigShipCount" exact="0"/>
+                  <set_value name="$BigSize" exact="class.ship_l"/>
+                  <do_if value="$Dist ge 200km">
+                    <!-- Outer zone: may spawn one L/XL ship. -->
+                    <set_value name="$BigShipCount" min="0" max="1"/>
+                    <do_if value="$BigShipCount == 1">
+                      <set_value name="$R" min="1" max="100"/>
+                      <do_if value="$R le 30">
+                        <set_value name="$BigSize" exact="class.ship_xl"/>
+                      </do_if>
                     </do_if>
                   </do_if>
-                </do_if>
+                </do_else>
 
                 <set_value name="$GroupIndex" exact="parent.$GroupCounter + 1"/>
                 <set_value name="parent.$GroupCounter" exact="$GroupIndex"/>
@@ -180,26 +214,55 @@
                 <do_all exact="$GroupSize" counter="$i">
                   <set_value name="$TemplateFaction" exact="parent.$TemplateFactions.random"/>
 
-                  <!-- First ship is always a combat-capable S/M escort. -->
-                  <do_if value="$i == 1">
-                    <set_value name="$R" min="1" max="100"/>
-                    <do_if value="$R le 60">
-                      <set_value name="$ShipSize" exact="class.ship_s"/>
+                  <do_if value="$IsOfficer">
+                    <!-- Officer fleet: XL flagship leads, next two are escorts, rest mixed. -->
+                    <do_if value="$i == 1">
+                      <set_value name="$ShipSize" exact="class.ship_xl"/>
                     </do_if>
+                    <do_elseif value="$i le 3">
+                      <set_value name="$R" min="1" max="100"/>
+                      <do_if value="$R le 60">
+                        <set_value name="$ShipSize" exact="class.ship_s"/>
+                      </do_if>
+                      <do_else>
+                        <set_value name="$ShipSize" exact="class.ship_m"/>
+                      </do_else>
+                    </do_elseif>
                     <do_else>
-                      <set_value name="$ShipSize" exact="class.ship_m"/>
+                      <set_value name="$R" min="1" max="100"/>
+                      <do_if value="$R le 45">
+                        <set_value name="$ShipSize" exact="class.ship_s"/>
+                      </do_if>
+                      <do_elseif value="$R le 80">
+                        <set_value name="$ShipSize" exact="class.ship_m"/>
+                      </do_elseif>
+                      <do_else>
+                        <set_value name="$ShipSize" exact="class.ship_l"/>
+                      </do_else>
                     </do_else>
                   </do_if>
-                  <do_elseif value="$BigShipCount == 1 and $i == 2">
-                    <set_value name="$ShipSize" exact="$BigSize"/>
-                  </do_elseif>
                   <do_else>
-                    <set_value name="$R" min="1" max="100"/>
-                    <do_if value="$R le 65">
-                      <set_value name="$ShipSize" exact="class.ship_s"/>
+                    <!-- First ship is always a combat-capable S/M escort. -->
+                    <do_if value="$i == 1">
+                      <set_value name="$R" min="1" max="100"/>
+                      <do_if value="$R le 60">
+                        <set_value name="$ShipSize" exact="class.ship_s"/>
+                      </do_if>
+                      <do_else>
+                        <set_value name="$ShipSize" exact="class.ship_m"/>
+                      </do_else>
                     </do_if>
+                    <do_elseif value="$BigShipCount == 1 and $i == 2">
+                      <set_value name="$ShipSize" exact="$BigSize"/>
+                    </do_elseif>
                     <do_else>
-                      <set_value name="$ShipSize" exact="class.ship_m"/>
+                      <set_value name="$R" min="1" max="100"/>
+                      <do_if value="$R le 65">
+                        <set_value name="$ShipSize" exact="class.ship_s"/>
+                      </do_if>
+                      <do_else>
+                        <set_value name="$ShipSize" exact="class.ship_m"/>
+                      </do_else>
                     </do_else>
                   </do_else>
 
@@ -210,8 +273,15 @@
                     <pilot>
                       <select race="$TemplateFaction.primaryrace" tags="tag.aipilot"/>
                       <skills>
-                        <skill type="morale" exact="15"/>
-                        <skill type="piloting" exact="15"/>
+                        <do_if value="$IsOfficer">
+                          <skill type="morale" exact="30"/>
+                          <skill type="piloting" exact="30"/>
+                          <skill type="engineering" exact="25"/>
+                        </do_if>
+                        <do_else>
+                          <skill type="morale" exact="15"/>
+                          <skill type="piloting" exact="15"/>
+                        </do_else>
                       </skills>
                     </pilot>
                     <paint ware="$PaintMod"/>
@@ -249,7 +319,12 @@
                 <!-- Store the group so we can keep groups spread out and clean up later. -->
                 <append_to_list name="parent.$ActiveGroups" exact="table[$X = $BaseX, $Y = $BaseY, $Z = $BaseZ, $Sector = parent.$Sector, $Faction = $PirateFaction, $Group = $Group, $Preset = $GroupPreset]"/>
                 <set_value name="parent.$NextSpawn" exact="player.age + 30s"/>
-                <show_notification text="{35002,20}.[$PirateFaction.knownname, $Group.count, parent.$Sector.knownname]"/>
+                <do_if value="$IsOfficer">
+                  <show_notification text="{35002,40}.[$OfficerName, $PirateFaction.knownname, $Group.count, parent.$Sector.knownname]"/>
+                </do_if>
+                <do_else>
+                  <show_notification text="{35002,20}.[$PirateFaction.knownname, $Group.count, parent.$Sector.knownname]"/>
+                </do_else>
               </do_if>
             </do_if>
           </actions>

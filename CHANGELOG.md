@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.11] - 2026-08-20
+
+### Added
+- **Rare named officer fleets** with a 5% spawn chance:
+  - Group size 8–12 ships led by an XL flagship.
+  - Named officer per faction (e.g. `Domni Avasarala`, `Arak Nirak`).
+  - Elite loadout (0.85–1.00) and 400% CONCORD bounty.
+  - Special notification when an officer fleet spawns.
+- **Loot drops**: destroyed EVE pirate ships have a 15% chance to drop a random ship mod part (T1–T3 engine/shield/hull/weapon mods plus generic parts).
+- `md/EVE_Loot.xml` handles mod-part drops.
+- Debug flags in `md/EVE_Spawner.xml` and `md/EVE_Loot.xml` to force officer spawns / loot drops for testing.
+
 ## [2.10] - 2026-08-20
 
 ### Added

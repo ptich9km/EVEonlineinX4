@@ -19,6 +19,8 @@
     <t id="20">%s: group of %s ships detected in %s.</t>
     <t id="30">CONCORD bounty paid for a %s ship: %s</t>
     <t id="31">CONCORD bounty paid for a %s %s ship: %s</t>
+    <t id="40">OFFICER FLEET: %s (%s) leading %s ships detected in %s.</t>
+    <t id="50">%s wreck salvaged: %s recovered.</t>
     <t id="100">Pirate</t>
     <t id="101">Soldier</t>
     <t id="102">Officer</t>
