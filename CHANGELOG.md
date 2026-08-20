@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.14] - 2026-08-20
+
+### Changed
+- **High-preset officer groups**: the first ship is now always an **L or XL military commander** (70% L, 30% XL); remaining ships are S/M military escorts.
+- Removed accidental XL-only chance from high-preset officer big-ship logic; big-ship fallback is now only used for low/medium outer-zone spawns.
+
 ## [2.13] - 2026-08-20
 
 ### Changed

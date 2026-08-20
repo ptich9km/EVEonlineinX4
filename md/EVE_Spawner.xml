@@ -178,15 +178,7 @@
                   <!-- Zone decides whether big ships can appear. -->
                   <set_value name="$BigShipCount" exact="0"/>
                   <set_value name="$BigSize" exact="class.ship_l"/>
-                  <do_if value="$GroupPreset == 'high'">
-                    <!-- Officer-grade groups always contain at least one big military ship. -->
-                    <set_value name="$BigShipCount" exact="1"/>
-                    <set_value name="$R" min="1" max="100"/>
-                    <do_if value="$R le 30">
-                      <set_value name="$BigSize" exact="class.ship_xl"/>
-                    </do_if>
-                  </do_if>
-                  <do_elseif value="$Dist ge 200km">
+                  <do_if value="$Dist ge 200km">
                     <!-- Outer zone: may spawn one L/XL ship. -->
                     <set_value name="$BigShipCount" min="0" max="1"/>
                     <do_if value="$BigShipCount == 1">
@@ -195,7 +187,7 @@
                         <set_value name="$BigSize" exact="class.ship_xl"/>
                       </do_if>
                     </do_if>
-                  </do_elseif>
+                  </do_if>
                 </do_else>
 
                 <set_value name="$GroupIndex" exact="parent.$GroupCounter + 1"/>
@@ -279,34 +271,32 @@
                     </do_if>
                   </do_if>
                   <do_elseif value="$GroupPreset == 'high'">
-                    <!-- High-grade officer group: guaranteed one L/XL military ship plus military escorts. -->
+                    <!-- Officer group: L/XL military commander plus S/M military escorts. -->
                     <do_if value="$i == 1">
                       <set_value name="$R" min="1" max="100"/>
-                      <do_if value="$R le 40">
-                        <set_value name="$ShipSize" exact="class.ship_m"/>
+                      <do_if value="$R le 70">
+                        <set_value name="$ShipSize" exact="class.ship_l"/>
                       </do_if>
                       <do_else>
+                        <set_value name="$ShipSize" exact="class.ship_xl"/>
+                      </do_else>
+                      <get_ship_definition reference="$ShipDef" faction="$TemplateFaction" size="$ShipSize" tags="tag.military"/>
+                      <do_if value="not $ShipDef">
+                        <get_ship_definition reference="$ShipDef" faction="$TemplateFaction" size="$ShipSize"/>
+                      </do_if>
+                    </do_if>
+                    <do_else>
+                      <set_value name="$R" min="1" max="100"/>
+                      <do_if value="$R le 60">
                         <set_value name="$ShipSize" exact="class.ship_s"/>
+                      </do_if>
+                      <do_else>
+                        <set_value name="$ShipSize" exact="class.ship_m"/>
                       </do_else>
                       <get_ship_definition reference="$ShipDef" faction="$TemplateFaction" size="$ShipSize" tags="tag.military"/>
                       <do_if value="not $ShipDef">
                         <set_value name="$ShipSize" exact="class.ship_m"/>
                       </do_if>
-                    </do_if>
-                    <do_elseif value="$BigShipCount == 1 and $i == 2">
-                      <get_ship_definition reference="$ShipDef" faction="$TemplateFaction" size="$BigSize" tags="tag.military"/>
-                      <do_if value="not $ShipDef">
-                        <get_ship_definition reference="$ShipDef" faction="$TemplateFaction" size="$BigSize"/>
-                      </do_if>
-                    </do_elseif>
-                    <do_else>
-                      <set_value name="$R" min="1" max="100"/>
-                      <do_if value="$R le 65">
-                        <set_value name="$ShipSize" exact="class.ship_s"/>
-                      </do_if>
-                      <do_else>
-                        <set_value name="$ShipSize" exact="class.ship_m"/>
-                      </do_else>
                     </do_else>
                     <do_if value="$ShipDef">
                       <set_value name="$UseRef" exact="true"/>
