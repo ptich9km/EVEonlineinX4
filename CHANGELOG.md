@@ -1,5 +1,10 @@
 # Changelog
 
+## [2.16] - 2026-08-21
+
+### Changed
+- Added proper **Russian, French and German descriptions** inside `content.xml` for Steam Workshop language entries.
+
 ## [2.15] - 2026-08-21
 
 ### Added
