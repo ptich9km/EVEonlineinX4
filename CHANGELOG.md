@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.20] - 2026-08-21
+
+### Fixed
+- Fixed `$Size.knownname` crash when calling a support ship; size label is now resolved manually (S/M/L).
+- Added debug logging to `Call_Support` to diagnose ship-spawn failures.
+- Replaced empty `Add_Row` spacers with empty `Make_Text` widgets so they actually render in the Options menu.
+
 ## [2.19] - 2026-08-21
 
 ### Changed
