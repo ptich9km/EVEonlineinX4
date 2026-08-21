@@ -1,5 +1,10 @@
 # Changelog
 
+## [2.21] - 2026-08-21
+
+### Fixed
+- Support ships now spawn **next to the player's ship** instead of at the sector centre by using `object="player.occupiedship"` in `get_safe_pos`.
+
 ## [2.20] - 2026-08-21
 
 ### Fixed

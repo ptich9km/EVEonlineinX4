@@ -197,8 +197,7 @@
 
           <do_if value="player.occupiedship.exists and player.occupiedship.sector.exists">
             <set_value name="$Sector" exact="player.occupiedship.sector"/>
-            <set_value name="$PlayerPos" exact="player.occupiedship.position"/>
-            <get_safe_pos result="$SpawnPos" sector="$Sector" x="$PlayerPos.x" y="$PlayerPos.y" z="$PlayerPos.z" allowyaxis="false" radius="5km"/>
+            <get_safe_pos result="$SpawnPos" sector="$Sector" object="player.occupiedship" radius="5km"/>
             <debug_text text="'MOD: EVEonlineinX4 -- Call_Support: sector=' + $Sector.knownname + ' pos=' + $SpawnPos" context="false" filter="scripts"/>
 
             <set_value name="$ShipDef" exact="null"/>
