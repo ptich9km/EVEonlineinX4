@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.15] - 2026-08-21
+
+### Added
+- **Russian language support**: added `t/0001-L007.xml` with full translations for faction names, descriptions, prefixes and notifications.
+- **French and German placeholders**: added `t/0001-L033.xml` and `t/0001-L049.xml` with English fallback text to prevent `readtext...` errors for those languages until proper translations are added.
+- Added `<text language="7"/"33"/"49"/>` entries to `content.xml` so Steam shows the mod as supporting Russian, French and German.
+
 ## [2.14] - 2026-08-20
 
 ### Changed

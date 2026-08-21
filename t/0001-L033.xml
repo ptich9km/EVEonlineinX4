@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<language id="33">
+  <page id="35002" title="EVE Online in X4" descr="Faction names and notification texts for the EVE Online in X4 mod" voice="no">
+    <t id="1">Angel Cartel</t>
+    <t id="2">A ruthless pirate organisation from EVE Online, known for fast ships and ambush tactics. They have no stations in X4 space and prey only on independent pilots.</t>
+    <t id="3">Blood Raiders</t>
+    <t id="4">Fanatical pirates from EVE Online who terrorise lone travellers. They own no stations here and hunt only the player.</t>
+    <t id="5">Guristas Pirates</t>
+    <t id="6">Opportunistic pirates from EVE Online led by former military officers. They have no stations and attack only the player.</t>
+    <t id="7">Sansha's Nation</t>
+    <t id="8">A mysterious slave-empire from EVE Online that fields heavily modified ships. They hold no stations and target only the player.</t>
+    <t id="9">CONCORD</t>
+    <t id="10">The interstellar police force from EVE Online. CONCORD pays bounties for every pirate ship destroyed, but has no stations of its own.</t>
+    <t id="11">ANG</t>
+    <t id="12">BLD</t>
+    <t id="13">GUR</t>
+    <t id="14">SAN</t>
+    <t id="15">CON</t>
+    <t id="20">%s: group of %s ships detected in %s.</t>
+    <t id="30">CONCORD bounty paid for a %s ship: %s</t>
+    <t id="31">CONCORD bounty paid for a %s %s ship: %s</t>
+    <t id="40">OFFICER FLEET: %s (%s) leading %s ships detected in %s.</t>
+    <t id="50">%s wreck salvaged: %s recovered.</t>
+    <t id="100">Pirate</t>
+    <t id="101">Soldier</t>
+    <t id="102">Officer</t>
+  </page>
+</language>
