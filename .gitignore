@@ -5,5 +5,4 @@ dist/
 tmp/
 
 # IDE / OS
-.vscode/
 *.zip

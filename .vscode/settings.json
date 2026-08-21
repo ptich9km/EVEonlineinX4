@@ -1,0 +1,20 @@
+{
+  // XML validation for X4 mod files using the game's XSD schemas from source/.
+  // Requires the Red Hat XML extension (redhat.vscode-xml).
+  "xml.fileAssociations": [
+    {
+      "pattern": "EVEonlineinX4/md/*.xml",
+      "systemId": "source/libraries/md.xsd"
+    },
+    {
+      "pattern": "EVEonlineinX4/libraries/factions.xml",
+      "systemId": "source/libraries/factions.xsd"
+    },
+    {
+      "pattern": "EVEonlineinX4/libraries/icons.xml",
+      "systemId": "source/libraries/diff.xsd"
+    }
+  ],
+  "xml.validation.enabled": true,
+  "xml.validation.resolveExternalEntities": true
+}
