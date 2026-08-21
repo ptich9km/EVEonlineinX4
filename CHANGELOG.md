@@ -1,5 +1,10 @@
 # Changelog
 
+## [2.18] - 2026-08-21
+
+### Fixed
+- **Extension Options menu now displays readable English text** instead of `readtext` codes. SirNukes Simple Menu API does not resolve `{page,id}` strings in menu widgets, so the labels are passed as plain strings.
+
 ## [2.17] - 2026-08-21
 
 ### Added

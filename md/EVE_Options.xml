@@ -35,7 +35,7 @@
         <signal_cue_instantly cue="md.Simple_Menu_API.Register_Options_Menu" param="table[
             $id = 'ptich_eve_online_in_x4_options',
             $columns = 2,
-            $title = '{35002,200}',
+            $title = 'EVE Online in X4 Options',
             $onOpen = BuildOptions
           ]"/>
       </actions>
@@ -50,7 +50,7 @@
         <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
         <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
             $col = 1, $colSpan = 2,
-            $text = '{35002,200}',
+            $text = 'EVE Online in X4 Options',
             $titleText = true
           ]"/>
 
@@ -58,14 +58,14 @@
         <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
         <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
             $col = 1,
-            $text = '{35002,201}',
-            $mouseOverText = '{35002,202}'
+            $text = 'Enable pirate spawning',
+            $mouseOverText = 'When ON, EVE pirate groups continue to spawn in Heretic\'s End. Turn OFF to stop new spawns. Already spawned groups remain.'
           ]"/>
         <signal_cue_instantly cue="md.Simple_Menu_API.Make_Button" param="table[
             $col = 2,
             $onClick = Toggle_SpawnEnabled,
             $text = table[
-              $text = if global.$EVEonlineinX4.$SpawnEnabled then '{35002,203}' else '{35002,204}',
+              $text = if global.$EVEonlineinX4.$SpawnEnabled then 'ON' else 'OFF',
               $color = if global.$EVEonlineinX4.$SpawnEnabled then 'Color.text_success' else 'Color.text_failure',
               $halign = 'center'
             ]
@@ -75,28 +75,28 @@
         <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
         <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
             $col = 1, $colSpan = 2,
-            $text = '{35002,210}.[global.$EVEonlineinX4.$Score]'
+            $text = 'CONCORD score: ' + global.$EVEonlineinX4.$Score
           ]"/>
 
         <!-- Support ships section -->
         <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
         <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
             $col = 1, $colSpan = 2,
-            $text = '{35002,220}',
+            $text = 'Call CONCORD support ship',
             $titleText = true
           ]"/>
 
         <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
         <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
             $col = 1,
-            $text = '{35002,221}',
-            $mouseOverText = '{35002,224}.[10]'
+            $text = 'Abandoned S-class warship',
+            $mouseOverText = 'Cost: 10 CONCORD points'
           ]"/>
         <signal_cue_instantly cue="md.Simple_Menu_API.Make_Button" param="table[
             $col = 2,
             $onClick = Call_Support_S,
             $text = table[
-              $text = '{35002,225}.[10]',
+              $text = 'Call (10 pts)',
               $halign = 'center'
             ]
           ]"/>
@@ -104,14 +104,14 @@
         <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
         <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
             $col = 1,
-            $text = '{35002,222}',
-            $mouseOverText = '{35002,224}.[25]'
+            $text = 'Abandoned M-class warship',
+            $mouseOverText = 'Cost: 25 CONCORD points'
           ]"/>
         <signal_cue_instantly cue="md.Simple_Menu_API.Make_Button" param="table[
             $col = 2,
             $onClick = Call_Support_M,
             $text = table[
-              $text = '{35002,225}.[25]',
+              $text = 'Call (25 pts)',
               $halign = 'center'
             ]
           ]"/>
@@ -119,14 +119,14 @@
         <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
         <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
             $col = 1,
-            $text = '{35002,223}',
-            $mouseOverText = '{35002,224}.[100]'
+            $text = 'Abandoned L-class warship',
+            $mouseOverText = 'Cost: 100 CONCORD points'
           ]"/>
         <signal_cue_instantly cue="md.Simple_Menu_API.Make_Button" param="table[
             $col = 2,
             $onClick = Call_Support_L,
             $text = table[
-              $text = '{35002,225}.[100]',
+              $text = 'Call (100 pts)',
               $halign = 'center'
             ]
           ]"/>
