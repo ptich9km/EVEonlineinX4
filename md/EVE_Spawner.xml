@@ -71,6 +71,11 @@
             <check_value value="player.age ge parent.$NextSpawn"/>
           </conditions>
           <actions>
+            <!-- Respect the player toggle in Extension Options. -->
+            <do_if value="global.$EVEonlineinX4? and not global.$EVEonlineinX4.$SpawnEnabled">
+              <debug_text text="'MOD: EVEonlineinX4 -- spawning disabled by player.'" context="false" filter="scripts"/>
+            </do_if>
+            <do_else>
             <!-- Count currently active groups. -->
             <set_value name="$LiveCount" exact="0"/>
             <do_for_each name="$Rec" in="parent.$ActiveGroups">
@@ -415,6 +420,7 @@
                 </do_else>
               </do_if>
             </do_if>
+            </do_else>
           </actions>
         </cue>
 
@@ -522,6 +528,26 @@
             </do_else>
 
             <reward_player money="$Bounty"/>
+
+            <!-- Award CONCORD points for killing EVE pirates. -->
+            <set_value name="$Score" exact="1"/>
+            <do_if value="parent.$ShipPresets.{$Victim}?">
+              <set_value name="$PresetData" exact="parent.$ShipPresets.{$Victim}"/>
+              <do_if value="$PresetData.$IsOfficer">
+                <set_value name="$Score" exact="3"/>
+              </do_if>
+              <do_elseif value="$PresetData.$Prefix?">
+                <do_if value="$PresetData.$Prefix == 'Soldier'">
+                  <set_value name="$Score" exact="2"/>
+                </do_if>
+                <do_elseif value="$PresetData.$Prefix == 'Officer'">
+                  <set_value name="$Score" exact="3"/>
+                </do_elseif>
+              </do_elseif>
+            </do_if>
+            <set_value name="global.$EVEonlineinX4.$Score" operation="add" exact="$Score"/>
+            <show_notification text="{35002,230}.[$Score, global.$EVEonlineinX4.$Score]"/>
+
             <do_if value="$Prefix != ''">
               <show_notification text="{35002,31}.[$Prefix, $Victim.owner.knownname, $Bounty.formatted.{'%.s %Cr'}]"/>
             </do_if>

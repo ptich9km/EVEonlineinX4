@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mdscript name="EVE_Options" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="md.xsd">
+  <!--
+    In-game options menu for EVE Online in X4.
+    Uses SirNukes Simple Menu API (dependency: ws_2042901274).
+  -->
+  <cues>
+    <cue name="Init" instantiate="true">
+      <conditions>
+        <check_any>
+          <event_universe_generated/>
+          <event_game_loaded/>
+        </check_any>
+      </conditions>
+      <actions>
+        <do_if value="not global.$EVEonlineinX4?">
+          <set_value name="global.$EVEonlineinX4" exact="table[]"/>
+        </do_if>
+        <do_if value="not global.$EVEonlineinX4.$SpawnEnabled?">
+          <set_value name="global.$EVEonlineinX4.$SpawnEnabled" exact="true"/>
+        </do_if>
+        <do_if value="not global.$EVEonlineinX4.$Score?">
+          <set_value name="global.$EVEonlineinX4.$Score" exact="0"/>
+        </do_if>
+        <debug_text text="'MOD: EVEonlineinX4 -- global state initialized. SpawnEnabled=' + global.$EVEonlineinX4.$SpawnEnabled + ' Score=' + global.$EVEonlineinX4.$Score" context="false" filter="scripts"/>
+      </actions>
+    </cue>
+
+    <cue name="RegisterOptions" instantiate="true">
+      <conditions>
+        <event_cue_signalled cue="md.Simple_Menu_API.Reloaded"/>
+      </conditions>
+      <actions>
+        <debug_text text="'MOD: EVEonlineinX4 -- RegisterOptions fired.'" context="false" filter="scripts"/>
+        <signal_cue_instantly cue="md.Simple_Menu_API.Register_Options_Menu" param="table[
+            $id = 'ptich_eve_online_in_x4_options',
+            $columns = 2,
+            $title = '{35002,200}',
+            $onOpen = BuildOptions
+          ]"/>
+      </actions>
+    </cue>
+
+    <cue name="BuildOptions" instantiate="true">
+      <conditions>
+        <event_cue_signalled/>
+      </conditions>
+      <actions>
+        <!-- Title -->
+        <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
+        <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+            $col = 1, $colSpan = 2,
+            $text = '{35002,200}',
+            $titleText = true
+          ]"/>
+
+        <!-- Spawn toggle -->
+        <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
+        <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+            $col = 1,
+            $text = '{35002,201}',
+            $mouseOverText = '{35002,202}'
+          ]"/>
+        <signal_cue_instantly cue="md.Simple_Menu_API.Make_Button" param="table[
+            $col = 2,
+            $onClick = Toggle_SpawnEnabled,
+            $text = table[
+              $text = if global.$EVEonlineinX4.$SpawnEnabled then '{35002,203}' else '{35002,204}',
+              $color = if global.$EVEonlineinX4.$SpawnEnabled then 'Color.text_success' else 'Color.text_failure',
+              $halign = 'center'
+            ]
+          ]"/>
+
+        <!-- CONCORD score display -->
+        <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
+        <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+            $col = 1, $colSpan = 2,
+            $text = '{35002,210}.[global.$EVEonlineinX4.$Score]'
+          ]"/>
+
+        <!-- Support ships section -->
+        <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
+        <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+            $col = 1, $colSpan = 2,
+            $text = '{35002,220}',
+            $titleText = true
+          ]"/>
+
+        <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
+        <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+            $col = 1,
+            $text = '{35002,221}',
+            $mouseOverText = '{35002,224}.[10]'
+          ]"/>
+        <signal_cue_instantly cue="md.Simple_Menu_API.Make_Button" param="table[
+            $col = 2,
+            $onClick = Call_Support_S,
+            $text = table[
+              $text = '{35002,225}.[10]',
+              $halign = 'center'
+            ]
+          ]"/>
+
+        <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
+        <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+            $col = 1,
+            $text = '{35002,222}',
+            $mouseOverText = '{35002,224}.[25]'
+          ]"/>
+        <signal_cue_instantly cue="md.Simple_Menu_API.Make_Button" param="table[
+            $col = 2,
+            $onClick = Call_Support_M,
+            $text = table[
+              $text = '{35002,225}.[25]',
+              $halign = 'center'
+            ]
+          ]"/>
+
+        <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
+        <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+            $col = 1,
+            $text = '{35002,223}',
+            $mouseOverText = '{35002,224}.[100]'
+          ]"/>
+        <signal_cue_instantly cue="md.Simple_Menu_API.Make_Button" param="table[
+            $col = 2,
+            $onClick = Call_Support_L,
+            $text = table[
+              $text = '{35002,225}.[100]',
+              $halign = 'center'
+            ]
+          ]"/>
+      </actions>
+    </cue>
+
+    <cue name="Toggle_SpawnEnabled" instantiate="true">
+      <conditions>
+        <event_cue_signalled/>
+      </conditions>
+      <actions>
+        <set_value name="global.$EVEonlineinX4.$SpawnEnabled" exact="not global.$EVEonlineinX4.$SpawnEnabled"/>
+        <debug_text text="'MOD: EVEonlineinX4 -- SpawnEnabled toggled to: ' + global.$EVEonlineinX4.$SpawnEnabled" context="false" filter="scripts"/>
+        <signal_cue_instantly cue="md.Simple_Menu_API.Refresh_Menu"/>
+      </actions>
+    </cue>
+
+    <cue name="Call_Support_S" instantiate="true">
+      <conditions>
+        <event_cue_signalled/>
+      </conditions>
+      <actions>
+        <signal_cue_instantly cue="Call_Support" param="table[$Size = class.ship_s, $Cost = 10]"/>
+      </actions>
+    </cue>
+
+    <cue name="Call_Support_M" instantiate="true">
+      <conditions>
+        <event_cue_signalled/>
+      </conditions>
+      <actions>
+        <signal_cue_instantly cue="Call_Support" param="table[$Size = class.ship_m, $Cost = 25]"/>
+      </actions>
+    </cue>
+
+    <cue name="Call_Support_L" instantiate="true">
+      <conditions>
+        <event_cue_signalled/>
+      </conditions>
+      <actions>
+        <signal_cue_instantly cue="Call_Support" param="table[$Size = class.ship_l, $Cost = 100]"/>
+      </actions>
+    </cue>
+
+    <cue name="Call_Support" instantiate="true">
+      <conditions>
+        <event_cue_signalled/>
+      </conditions>
+      <actions>
+        <set_value name="$Cost" exact="event.param.$Cost"/>
+        <set_value name="$Size" exact="event.param.$Size"/>
+
+        <do_if value="global.$EVEonlineinX4.$Score lt $Cost">
+          <show_notification text="{35002,226}.[global.$EVEonlineinX4.$Score, $Cost]"/>
+          <signal_cue_instantly cue="md.Simple_Menu_API.Refresh_Menu"/>
+        </do_if>
+        <do_else>
+          <set_value name="global.$EVEonlineinX4.$Score" operation="subtract" exact="$Cost"/>
+
+          <do_if value="player.occupiedship.exists and player.occupiedship.sector.exists">
+            <set_value name="$Sector" exact="player.occupiedship.sector"/>
+            <get_safe_pos result="$SpawnPos" sector="$Sector" x="player.occupiedship.position.x" y="player.occupiedship.position.y" z="player.occupiedship.position.z" allowyaxis="false" radius="5km"/>
+
+            <get_ship_definition reference="$ShipDef" faction="faction.argon" size="$Size" tags="tag.military"/>
+            <do_if value="not $ShipDef">
+              <get_ship_definition reference="$ShipDef" faction="faction.argon" size="$Size"/>
+            </do_if>
+
+            <do_if value="$ShipDef?">
+              <create_ship name="$Support" sector="$Sector" ref="$ShipDef" capturable="true">
+                <owner exact="faction.ownerless"/>
+                <safepos value="$SpawnPos"/>
+              </create_ship>
+              <do_if value="$Support.exists">
+                <set_known object="$Support" known="true"/>
+                <show_notification text="{35002,227}.[$Size.knownname]"/>
+              </do_if>
+              <do_else>
+                <show_notification text="{35002,228}"/>
+              </do_else>
+            </do_if>
+            <do_else>
+              <show_notification text="{35002,228}"/>
+            </do_else>
+          </do_if>
+          <do_else>
+            <show_notification text="{35002,229}"/>
+          </do_else>
+
+          <signal_cue_instantly cue="md.Simple_Menu_API.Refresh_Menu"/>
+        </do_else>
+      </actions>
+    </cue>
+  </cues>
+</mdscript>

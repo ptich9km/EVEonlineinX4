@@ -24,5 +24,22 @@
     <t id="100">Pirate</t>
     <t id="101">Soldier</t>
     <t id="102">Officer</t>
+    <t id="200">EVE Online in X4 Options</t>
+    <t id="201">Enable pirate spawning</t>
+    <t id="202">When ON, EVE pirate groups continue to spawn in Heretic's End. Turn OFF to stop new spawns. Already spawned groups remain.</t>
+    <t id="203">ON</t>
+    <t id="204">OFF</t>
+    <t id="210">CONCORD score: %s</t>
+    <t id="220">Call CONCORD support ship</t>
+    <t id="221">Abandoned S-class warship</t>
+    <t id="222">Abandoned M-class warship</t>
+    <t id="223">Abandoned L-class warship</t>
+    <t id="224">Cost: %s CONCORD points</t>
+    <t id="225">Call (%s pts)</t>
+    <t id="226">Not enough CONCORD points (%s / %s)</t>
+    <t id="227">Abandoned %s warship spawned nearby.</t>
+    <t id="228">Failed to spawn support ship.</t>
+    <t id="229">You must be piloting a ship in space.</t>
+    <t id="230">CONCORD score: +%s (total: %s)</t>
   </page>
 </language>

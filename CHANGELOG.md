@@ -1,5 +1,22 @@
 # Changelog
 
+## [2.17] - 2026-08-21
+
+### Added
+- **Extension Options menu** (`md/EVE_Options.xml`) using SirNukes Simple Menu API:
+  - Toggle to **enable/disable pirate spawning** in Heretic's End (default: ON).
+  - Live display of current **CONCORD score**.
+  - Spend CONCORD points to call an **abandoned support warship** near the player:
+    - S-class warship — 10 points.
+    - M-class warship — 25 points.
+    - L-class warship — 100 points.
+- **CONCORD score system**: earn points for destroying EVE pirate ships.
+  - Regular pirate — 1 point.
+  - Soldier/Officer-preset ships — 2 points.
+  - Named officer fleets — 3 points.
+- New localization strings (IDs 200–230) for the options menu in `t/0001-L044.xml`, `t/0001-L007.xml`, `t/0001-L033.xml` and `t/0001-L049.xml`.
+- Added `md/EVE_Options.xml` to `build_mod.sh` copy list.
+
 ## [2.16] - 2026-08-21
 
 ### Changed
