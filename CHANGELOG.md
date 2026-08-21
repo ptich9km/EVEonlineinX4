@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.19] - 2026-08-21
+
+### Changed
+- Extension Options menu title changed to **ptich9km: EVE Online in X4**.
+- Added visual spacers in the Options menu to separate the spawn toggle, CONCORD score and support-ship sections.
+
 ## [2.18] - 2026-08-21
 
 ### Fixed

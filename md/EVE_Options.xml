@@ -35,7 +35,7 @@
         <signal_cue_instantly cue="md.Simple_Menu_API.Register_Options_Menu" param="table[
             $id = 'ptich_eve_online_in_x4_options',
             $columns = 2,
-            $title = 'EVE Online in X4 Options',
+            $title = 'ptich9km: EVE Online in X4',
             $onOpen = BuildOptions
           ]"/>
       </actions>
@@ -50,7 +50,7 @@
         <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
         <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
             $col = 1, $colSpan = 2,
-            $text = 'EVE Online in X4 Options',
+            $text = 'ptich9km: EVE Online in X4',
             $titleText = true
           ]"/>
 
@@ -71,12 +71,18 @@
             ]
           ]"/>
 
+        <!-- Spacer -->
+        <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
+
         <!-- CONCORD score display -->
         <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
         <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
             $col = 1, $colSpan = 2,
             $text = 'CONCORD score: ' + global.$EVEonlineinX4.$Score
           ]"/>
+
+        <!-- Spacer -->
+        <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
 
         <!-- Support ships section -->
         <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
