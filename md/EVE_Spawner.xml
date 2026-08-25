@@ -52,7 +52,7 @@
         ]"/>
 
         <!-- Base factions used as ship templates. DLC factions are added only if they are active in the current universe. -->
-        <set_value name="$TemplateFactions" exact="[faction.argon, faction.paranid, faction.teladi]"/>
+        <set_value name="$TemplateFactions" exact="[faction.argon, faction.paranid, faction.teladi, faction.antigone, faction.alliance, faction.holyorder, faction.ministry, faction.scaleplate, faction.buccaneers]"/>
         <do_if value="faction.split.isactive">
           <append_to_list name="$TemplateFactions" exact="faction.split"/>
         </do_if>
@@ -61,6 +61,18 @@
         </do_if>
         <do_if value="faction.terran.isactive">
           <append_to_list name="$TemplateFactions" exact="faction.terran"/>
+        </do_if>
+        <do_if value="faction.loanshark.isactive">
+          <append_to_list name="$TemplateFactions" exact="faction.loanshark"/>
+        </do_if>
+        <do_if value="faction.freesplit.isactive">
+          <append_to_list name="$TemplateFactions" exact="faction.freesplit"/>
+        </do_if>
+        <do_if value="faction.pioneers.isactive">
+          <append_to_list name="$TemplateFactions" exact="faction.pioneers"/>
+        </do_if>
+        <do_if value="faction.scavenger.isactive">
+          <append_to_list name="$TemplateFactions" exact="faction.scavenger"/>
         </do_if>
       </actions>
       <cues>
@@ -499,6 +511,7 @@
           <actions>
             <set_value name="$Victim" exact="event.param2"/>
             <set_value name="$Bounty" exact="5000Cr"/>
+            
             <do_if value="$Victim.isclass.ship_s">
               <set_value name="$Bounty" exact="18000Cr"/>
             </do_if>
@@ -512,7 +525,6 @@
               <set_value name="$Bounty" exact="10000000Cr"/>
             </do_elseif>
 
-            <!-- Apply preset bounty multiplier if the ship was spawned by our spawner. -->
             <do_if value="parent.$ShipPresets.{$Victim}?">
               <set_value name="$PresetData" exact="parent.$ShipPresets.{$Victim}"/>
               <do_if value="$PresetData.$BountyPercent?">
@@ -529,7 +541,7 @@
 
             <reward_player money="$Bounty"/>
 
-            <!-- Award CONCORD points for killing EVE pirates. -->
+            <!-- Award CONCORD points -->
             <set_value name="$Score" exact="1"/>
             <do_if value="parent.$ShipPresets.{$Victim}?">
               <set_value name="$PresetData" exact="parent.$ShipPresets.{$Victim}"/>
