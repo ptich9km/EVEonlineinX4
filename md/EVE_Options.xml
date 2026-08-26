@@ -259,8 +259,7 @@
                 <set_value name="global.$EVEonlineinX4.$Score" operation="subtract" exact="$Cost"/>
                 <debug_text text="'MOD: EVEonlineinX4 -- Call_Support: Xenon macro=' + $XenonMacro" context="false" filter="scripts"/>
 
-                <create_ship name="$Support" sector="$Sector" capturable="true">
-                  <select macro="$XenonMacro"/>
+                <create_ship name="$Support" sector="$Sector" macro="$XenonMacro" capturable="true">
                   <owner exact="faction.ownerless"/>
                   <safepos value="$SpawnPos"/>
                 </create_ship>
