@@ -41,5 +41,7 @@
     <t id="228">Failed to spawn support ship.</t>
     <t id="229">You must be piloting a ship in space.</t>
     <t id="230">CONCORD score: +%s (total: %s)</t>
+    <t id="231">Rollenspiel-Fraktion festgelegt: %s</t>
+    <t id="232">Rollenspiel-Fraktion</t>
   </page>
 </language>

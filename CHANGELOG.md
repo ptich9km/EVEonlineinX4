@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.26] - 2026-08-26
+
+### Added
+- **Roleplay faction selector** in the Extension Options menu. Players can cycle through playable X4 factions; CONCORD support ships are now spawned from the selected faction's ship pool.
+- Xenon support ships use a special lookup path (no military tag) and fall back to Argon if no suitable ship is found.
+- DLC factions (Split, Boron, Terran) are included in the cycle; missing DLCs automatically fall back to Argon.
+- English placeholder localizations for **Portuguese (55)**, **Japanese (81)**, **Simplified Chinese (86)** and **Traditional Chinese (88)**. Persian/Farsi is not supported by the game, so no stub was created.
+
+## [2.25] - 2026-08-26
+
+### Fixed
+- **Support ship purchases no longer consume CONCORD points before the ship is actually spawned.** In `md/EVE_Options.xml` the score is now deducted only after a valid spawn position and ship definition are found. If `create_ship` fails for any reason, the points are refunded.
+- **Eliminated duplicate CONCORD bounty payouts after reloading a save.** Added `global.$EVEonlineinX4.$SpawnerInitialized` guard to the `Data` cue in `md/EVE_Spawner.xml` so the bounty listener and spawn ticks are registered only once per game.
+
 ## [2.21] - 2026-08-21
 
 ### Fixed

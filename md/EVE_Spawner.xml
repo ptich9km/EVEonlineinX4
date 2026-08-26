@@ -19,6 +19,7 @@
     <cue name="Data" instantiate="true" namespace="this">
       <conditions>
         <event_cue_signalled/>
+        <check_value value="not global.$EVEonlineinX4.$SpawnerInitialized"/>
       </conditions>
       <actions>
         <set_value name="$Sector" exact="event.param"/>
@@ -74,6 +75,9 @@
         <do_if value="faction.scavenger.isactive">
           <append_to_list name="$TemplateFactions" exact="faction.scavenger"/>
         </do_if>
+
+        <!-- Mark the spawner as initialized so it is not duplicated on game reload. -->
+        <set_value name="global.$EVEonlineinX4.$SpawnerInitialized" exact="true"/>
       </actions>
       <cues>
         <!-- Periodic spawn attempt. Check every 30 s; actual spawn no more than once per 30 s. -->

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<language id="33">
+<language id="86">
   <page id="35002" title="EVE Online in X4" descr="Faction names and notification texts for the EVE Online in X4 mod" voice="no">
     <t id="1">Angel Cartel</t>
     <t id="2">A ruthless pirate organisation from EVE Online, known for fast ships and ambush tactics. They have no stations in X4 space and prey only on independent pilots.</t>
@@ -41,7 +41,7 @@
     <t id="228">Failed to spawn support ship.</t>
     <t id="229">You must be piloting a ship in space.</t>
     <t id="230">CONCORD score: +%s (total: %s)</t>
-    <t id="231">Faction de roleplay définie : %s</t>
-    <t id="232">Faction de roleplay</t>
+    <t id="231">Roleplay faction set to: %s</t>
+    <t id="232">Roleplay faction</t>
   </page>
 </language>
