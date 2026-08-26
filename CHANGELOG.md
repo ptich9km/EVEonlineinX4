@@ -4,7 +4,7 @@
 
 ### Added
 - **Roleplay faction selector** in the Extension Options menu. Players can cycle through playable X4 factions; CONCORD support ships are now spawned from the selected faction's ship pool.
-- Xenon support ships use a special lookup path (no military tag) and fall back to Argon if no suitable ship is found.
+- Xenon support ships use a hard-coded pool of the only player-pilotable Xenon hulls: S (Fighter), M (B / PE corvettes), L (H terraformer).
 - DLC factions (Split, Boron, Terran) are included in the cycle; missing DLCs automatically fall back to Argon.
 - English placeholder localizations for **Portuguese (55)**, **Japanese (81)**, **Simplified Chinese (86)** and **Traditional Chinese (88)**. Persian/Farsi is not supported by the game, so no stub was created.
 
