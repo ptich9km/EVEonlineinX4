@@ -244,7 +244,7 @@
             <do_if value="$ShipFaction == faction.xenon">
               <set_value name="$XenonMacro" exact="null"/>
               <do_if value="$Size == class.ship_s">
-                <set_value name="$XenonMacro" exact="'ship_xen_s_fighter_01_a_macro'"/>
+                <set_value name="$XenonMacro" exact="'ship_xen_s_heavyfighter_01_a_macro'"/>
               </do_if>
               <do_elseif value="$Size == class.ship_m">
                 <set_value name="$R" min="1" max="100"/>
@@ -258,11 +258,12 @@
                 <set_value name="global.$EVEonlineinX4.$Score" operation="subtract" exact="$Cost"/>
                 <debug_text text="'MOD: EVEonlineinX4 -- Call_Support: Xenon macro=' + $XenonMacro" context="false" filter="scripts"/>
 
+                <generate_loadout result="$XenonLoadout" faction="faction.xenon" macro="$XenonMacro" level="1.0"/>
+                <debug_text text="'MOD: EVEonlineinX4 -- Call_Support: loadout generated=' + (if $XenonLoadout? then 'yes' else 'no')" context="false" filter="scripts"/>
+
                 <create_ship name="$Support" sector="$Sector" macro="$XenonMacro" capturable="true">
                   <owner exact="faction.ownerless"/>
-                  <loadout>
-                    <level exact="1.0"/>
-                  </loadout>
+                  <loadout loadout="$XenonLoadout.{1}"/>
                   <safepos value="$SpawnPos"/>
                 </create_ship>
                 <debug_text text="'MOD: EVEonlineinX4 -- Call_Support: support exists=' + $Support.exists" context="false" filter="scripts"/>
