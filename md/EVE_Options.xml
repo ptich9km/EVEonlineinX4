@@ -28,6 +28,12 @@
         <do_if value="not global.$EVEonlineinX4.$RoleplayFaction?">
           <set_value name="global.$EVEonlineinX4.$RoleplayFaction" exact="faction.argon"/>
         </do_if>
+        <do_if value="not global.$EVEonlineinX4.$PLEXBalance?">
+          <set_value name="global.$EVEonlineinX4.$PLEXBalance" exact="0"/>
+        </do_if>
+        <do_if value="not global.$EVEonlineinX4.$GroupSizeMultiplier?">
+          <set_value name="global.$EVEonlineinX4.$GroupSizeMultiplier" exact="1"/>
+        </do_if>
         <do_if value="not global.$EVEonlineinX4.$RoleplayFactionIndex?">
           <set_value name="global.$EVEonlineinX4.$RoleplayFactionIndex" exact="0"/>
         </do_if>
@@ -76,6 +82,51 @@
             $text = table[
               $text = if global.$EVEonlineinX4.$SpawnEnabled then 'ON' else 'OFF',
               $color = if global.$EVEonlineinX4.$SpawnEnabled then 'Color.text_success' else 'Color.text_failure',
+              $halign = 'center'
+            ]
+          ]"/>
+
+        <!-- Spacer -->
+        <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
+        <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[$col = 1, $colSpan = 2, $text = ' ']"/>
+
+        <!-- PLEX section -->
+        <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
+        <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+            $col = 1, $colSpan = 2,
+            $text = 'PLEX Upgrades',
+            $titleText = true
+          ]"/>
+
+        <set_value name="$Multiplier" exact="if global.$EVEonlineinX4.$GroupSizeMultiplier? then global.$EVEonlineinX4.$GroupSizeMultiplier else 1"/>
+        <set_value name="$NextMultiplier" exact="if $Multiplier == 1 then 2 else (if $Multiplier == 2 then 3 else (if $Multiplier == 3 then 5 else (if $Multiplier == 5 then 10 else 10)))"/>
+        <set_value name="$NextCost" exact="if $NextMultiplier == 2 then 1 else (if $NextMultiplier == 3 then 3 else (if $NextMultiplier == 5 then 6 else (if $NextMultiplier == 10 then 10 else 0)))"/>
+        <set_value name="$UpgradeText" exact="if $Multiplier == 10 then '{35002,320}' else '{35002,311}.[$NextMultiplier, $NextCost]'"/>
+
+        <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
+        <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+            $col = 1,
+            $text = '{35002,301}.[global.$EVEonlineinX4.$PLEXBalance]'
+          ]"/>
+        <signal_cue_instantly cue="md.Simple_Menu_API.Make_Button" param="table[
+            $col = 2,
+            $onClick = Convert_PLEX,
+            $text = table[
+              $text = '{35002,302}',
+              $halign = 'center'
+            ]
+          ]"/>
+
+        <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
+        <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+            $col = 1,
+            $text = '{35002,310}.[$Multiplier]'
+          ]"/>
+        <signal_cue_instantly cue="md.Simple_Menu_API.Make_Button" param="table[
+            $col = 2,
+            $onClick = Upgrade_GroupSize,
+            $text = table[
+              $text = $UpgradeText,
               $halign = 'center'
             ]
           ]"/>
@@ -215,6 +266,47 @@
       </conditions>
       <actions>
         <signal_cue_instantly cue="Call_Support" param="table[$Size = class.ship_l, $Cost = 100]"/>
+      </actions>
+    </cue>
+
+    <cue name="Convert_PLEX" instantiate="true">
+      <conditions>
+        <event_cue_signalled/>
+      </conditions>
+      <actions>
+        <do_if value="player.money lt 100000000Cr">
+          <show_notification text="{35002,303}.[player.money.formatted.{'%.s %Cr'}]"/>
+        </do_if>
+        <do_else>
+          <set_value name="player.money" operation="subtract" exact="100000000Cr"/>
+          <set_value name="global.$EVEonlineinX4.$PLEXBalance" operation="add" exact="1"/>
+          <show_notification text="{35002,304}"/>
+        </do_else>
+        <signal_cue_instantly cue="md.Simple_Menu_API.Refresh_Menu"/>
+      </actions>
+    </cue>
+
+    <cue name="Upgrade_GroupSize" instantiate="true">
+      <conditions>
+        <event_cue_signalled/>
+      </conditions>
+      <actions>
+        <set_value name="$Multiplier" exact="if global.$EVEonlineinX4.$GroupSizeMultiplier? then global.$EVEonlineinX4.$GroupSizeMultiplier else 1"/>
+        <set_value name="$NextMultiplier" exact="if $Multiplier == 1 then 2 else (if $Multiplier == 2 then 3 else (if $Multiplier == 3 then 5 else (if $Multiplier == 5 then 10 else 10)))"/>
+        <set_value name="$NextCost" exact="if $NextMultiplier == 2 then 1 else (if $NextMultiplier == 3 then 3 else (if $NextMultiplier == 5 then 6 else (if $NextMultiplier == 10 then 10 else 0)))"/>
+
+        <do_if value="$Multiplier == 10">
+          <show_notification text="{35002,312}"/>
+        </do_if>
+        <do_elseif value="global.$EVEonlineinX4.$PLEXBalance lt $NextCost">
+          <show_notification text="{35002,313}.[global.$EVEonlineinX4.$PLEXBalance, $NextCost]"/>
+        </do_elseif>
+        <do_else>
+          <set_value name="global.$EVEonlineinX4.$PLEXBalance" operation="subtract" exact="$NextCost"/>
+          <set_value name="global.$EVEonlineinX4.$GroupSizeMultiplier" exact="$NextMultiplier"/>
+          <show_notification text="{35002,314}.[$NextMultiplier]"/>
+        </do_else>
+        <signal_cue_instantly cue="md.Simple_Menu_API.Refresh_Menu"/>
       </actions>
     </cue>
 

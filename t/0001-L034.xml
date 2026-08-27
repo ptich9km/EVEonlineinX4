@@ -43,5 +43,16 @@
     <t id="230">Puntuación de CONCORD: +%s (total: %s)</t>
     <t id="231">Facción de roleplay establecida en: %s</t>
     <t id="232">Facción de roleplay</t>
+    <t id="300">PLEX</t>
+    <t id="301">PLEX balance: %s</t>
+    <t id="302">Buy 1 PLEX (100M Cr)</t>
+    <t id="303">Not enough credits (%s / 100,000,000 Cr)</t>
+    <t id="304">PLEX received: +1</t>
+    <t id="310">Group size multiplier: x%s</t>
+    <t id="311">Upgrade to x%s (%s PLEX)</t>
+    <t id="312">Max multiplier reached</t>
+    <t id="313">Not enough PLEX (%s / %s)</t>
+    <t id="314">Group size multiplier upgraded to x%s</t>
+    <t id="320">Max reached</t>
   </page>
 </language>

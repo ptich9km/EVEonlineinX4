@@ -85,6 +85,8 @@
           <conditions>
             <check_value value="parent.$Sector.exists"/>
             <check_value value="player.age ge parent.$NextSpawn"/>
+            <check_value value="player.sector?"/>
+            <check_value value="player.sector == parent.$Sector"/>
           </conditions>
           <actions>
             <!-- Respect the player toggle in Extension Options. -->
@@ -194,8 +196,10 @@
                     <set_value name="$BountyPercent" exact="200"/>
                   </do_else>
 
-                  <!-- Random group size: 2-5 ships. -->
-                  <set_value name="$GroupSize" min="2" max="5"/>
+                  <!-- Random group size: 2-5 ships, multiplied by the PLEX-purchased group size multiplier. -->
+                  <set_value name="$GroupSizeMultiplier" exact="if global.$EVEonlineinX4.$GroupSizeMultiplier? then global.$EVEonlineinX4.$GroupSizeMultiplier else 1"/>
+                  <set_value name="$BaseGroupSize" min="2" max="5"/>
+                  <set_value name="$GroupSize" exact="$BaseGroupSize * $GroupSizeMultiplier"/>
                   <!-- Zone decides whether big ships can appear. -->
                   <set_value name="$BigShipCount" exact="0"/>
                   <set_value name="$BigSize" exact="class.ship_l"/>

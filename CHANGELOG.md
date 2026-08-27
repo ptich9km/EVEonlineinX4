@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.50] - 2026-08-27
+
+### Added
+- **PLEX currency and group-size upgrades**: players can now convert excess credits (100M Cr) into PLEX and spend PLEX to increase pirate group sizes (x2, x3, x5, x10).
+- New **PLEX Upgrades** section in the Extension Options menu showing PLEX balance, a "Buy 1 PLEX" button and a group-size upgrade button.
+- Added English placeholder localizations for the new PLEX texts in all supported language files; Russian translation included.
+
+### Changed
+- Pirate groups now spawn **only while the player is in Heretic's End**. This prevents the sector from filling up while the player is elsewhere or after multiple save/load cycles.
+- Normal pirate group sizes are multiplied by the purchased PLEX multiplier; named officer fleets remain fixed at 8–12 ships.
+
 ## [2.26] - 2026-08-26
 
 ### Added
