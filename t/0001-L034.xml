@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<language id="34">
+  <page id="35002" title="EVE Online in X4" descr="Nombres de facciones y textos de notificación para el mod EVE Online in X4" voice="no">
+    <t id="1">Angel Cartel</t>
+    <t id="2">Una despiadada organización pirata de EVE Online, conocida por sus naves rápidas y tácticas de emboscada. No tienen estaciones en el espacio de X4 y solo atacan a pilotos independientes.</t>
+    <t id="3">Blood Raiders</t>
+    <t id="4">Piratas fanáticos de EVE Online que aterrorizan a viajeros solitarios. No tienen estaciones aquí y solo cazan al jugador.</t>
+    <t id="5">Guristas Pirates</t>
+    <t id="6">Piratas oportunistas de EVE Online liderados por antiguos oficiales militares. No tienen estaciones y solo atacan al jugador.</t>
+    <t id="7">Sansha's Nation</t>
+    <t id="8">Un misterioso imperio esclavista de EVE Online que utiliza naves fuertemente modificadas. No tienen estaciones y solo tienen al jugador como objetivo.</t>
+    <t id="9">CONCORD</t>
+    <t id="10">La fuerza policial interestelar de EVE Online. CONCORD paga recompensas por cada nave pirata destruida, pero no tiene estaciones propias.</t>
+    <t id="11">ANG</t>
+    <t id="12">BLD</t>
+    <t id="13">GUR</t>
+    <t id="14">SAN</t>
+    <t id="15">CON</t>
+    <t id="20">%s: grupo de %s naves detectado en %s.</t>
+    <t id="30">Recompensa de CONCORD pagada por una nave %s: %s</t>
+    <t id="31">Recompensa de CONCORD pagada por una nave %s %s: %s</t>
+    <t id="40">FLOTA OFICIAL: %s (%s) liderando %s naves detectadas en %s.</t>
+    <t id="50">Restos de %s salvados: %s recuperado.</t>
+    <t id="100">Pirata</t>
+    <t id="101">Soldado</t>
+    <t id="102">Oficial</t>
+    <t id="200">Opciones de EVE Online in X4</t>
+    <t id="201">Habilitar aparición de piratas</t>
+    <t id="202">Cuando está ACTIVADO, los grupos piratas de EVE siguen apareciendo en Heretic's End. Desactívalo para detener nuevas apariciones. Los grupos ya existentes permanecerán.</t>
+    <t id="203">ACTIVADO</t>
+    <t id="204">DESACTIVADO</t>
+    <t id="210">Puntuación de CONCORD: %s</t>
+    <t id="220">Llamar nave de apoyo de CONCORD</t>
+    <t id="221">Nave de guerra abandonada clase S</t>
+    <t id="222">Nave de guerra abandonada clase M</t>
+    <t id="223">Nave de guerra abandonada clase L</t>
+    <t id="224">Coste: %s puntos de CONCORD</t>
+    <t id="225">Llamar (%s pts)</t>
+    <t id="226">No hay suficientes puntos de CONCORD (%s / %s)</t>
+    <t id="227">Nave de guerra abandonada clase %s aparecida cerca.</t>
+    <t id="228">No se ha podido crear la nave de apoyo.</t>
+    <t id="229">Debes pilotar una nave en el espacio.</t>
+    <t id="230">Puntuación de CONCORD: +%s (total: %s)</t>
+    <t id="231">Facción de roleplay establecida en: %s</t>
+    <t id="232">Facción de roleplay</t>
+  </page>
+</language>
