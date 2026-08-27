@@ -101,18 +101,18 @@
         <set_value name="$Multiplier" exact="if global.$EVEonlineinX4.$GroupSizeMultiplier? then global.$EVEonlineinX4.$GroupSizeMultiplier else 1"/>
         <set_value name="$NextMultiplier" exact="if $Multiplier == 1 then 2 else (if $Multiplier == 2 then 3 else (if $Multiplier == 3 then 5 else (if $Multiplier == 5 then 10 else 10)))"/>
         <set_value name="$NextCost" exact="if $NextMultiplier == 2 then 1 else (if $NextMultiplier == 3 then 3 else (if $NextMultiplier == 5 then 6 else (if $NextMultiplier == 10 then 10 else 0)))"/>
-        <set_value name="$UpgradeText" exact="if $Multiplier == 10 then '{35002,320}' else '{35002,311}.[$NextMultiplier, $NextCost]'"/>
+        <set_value name="$UpgradeText" exact="if $Multiplier == 10 then 'Max reached' else 'Upgrade to x' + $NextMultiplier + ' (' + $NextCost + ' PLEX)'"/>
 
         <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
         <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
             $col = 1,
-            $text = '{35002,301}.[global.$EVEonlineinX4.$PLEXBalance]'
+            $text = 'PLEX balance: ' + global.$EVEonlineinX4.$PLEXBalance
           ]"/>
         <signal_cue_instantly cue="md.Simple_Menu_API.Make_Button" param="table[
             $col = 2,
             $onClick = Convert_PLEX,
             $text = table[
-              $text = '{35002,302}',
+              $text = 'Buy 1 PLEX (100M Cr)',
               $halign = 'center'
             ]
           ]"/>
@@ -120,7 +120,7 @@
         <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
         <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
             $col = 1,
-            $text = '{35002,310}.[$Multiplier]'
+            $text = 'Group size multiplier: x' + $Multiplier
           ]"/>
         <signal_cue_instantly cue="md.Simple_Menu_API.Make_Button" param="table[
             $col = 2,
