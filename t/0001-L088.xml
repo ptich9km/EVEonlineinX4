@@ -54,5 +54,26 @@
     <t id="313">Not enough PLEX (%s / %s)</t>
     <t id="314">Group size multiplier upgraded to x%s</t>
     <t id="320">Max reached</t>
+    <t id="321">CONCORD Bounty Board</t>
+    <t id="322">Join CONCORD Bounty Program</t>
+    <t id="323">Leave CONCORD Bounty Program</t>
+    <t id="324">Requires CONCORD reputation +10 (friend)</t>
+    <t id="325">Available missions</t>
+    <t id="326">Active missions</t>
+    <t id="327">Reward: %s CONCORD points</t>
+    <t id="328">Take</t>
+    <t id="329">Decline</t>
+    <t id="330">No missions available. New offers appear hourly.</t>
+    <t id="331">Mission complete! +%s CONCORD points</t>
+    <t id="332">Mission expired.</t>
+    <t id="333">You are not subscribed to CONCORD Bounty Program.</t>
+    <t id="334">%s / %s</t>
+    <t id="335">Destroy %s EVE pirate %s ships</t>
+    <t id="336">Destroy an EVE pirate group</t>
+    <t id="337">Destroy an EVE officer fleet</t>
+    <t id="338">Destroy %s EVE pirate ships</t>
+    <t id="339">New missions available.</t>
+    <t id="340">Subscription requires friendly reputation with CONCORD.</t>
+    <t id="341">CONCORD Bounty Program active.</t>
   </page>
 </language>

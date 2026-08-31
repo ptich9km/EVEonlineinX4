@@ -92,6 +92,8 @@
             <!-- Respect the player toggle in Extension Options. -->
             <do_if value="global.$EVEonlineinX4? and not global.$EVEonlineinX4.$SpawnEnabled">
               <debug_text text="'MOD: EVEonlineinX4 -- spawning disabled by player.'" context="false" filter="scripts"/>
+              <!-- Keep the spawn timer moving so it does not fire immediately when the player re-enables spawning. -->
+              <set_value name="parent.$NextSpawn" exact="player.age + 30s"/>
             </do_if>
             <do_else>
             <!-- Count currently active groups. -->
@@ -454,8 +456,14 @@
             <do_for_each name="$Rec" in="parent.$ActiveGroups">
               <do_if value="$Rec.$Group?">
                 <do_if value="$Rec.$Group.count gt 0 and $Rec.$X? and $Rec.$Y? and $Rec.$Z?">
+                  <set_value name="$Rec.$Reported" exact="false"/>
                   <append_to_list name="$NewActiveGroups" exact="$Rec"/>
                 </do_if>
+                <do_elseif value="$Rec.$Group.count == 0 and (not $Rec.$Reported or $Rec.$Reported == false)">
+                  <set_value name="$IsOfficer" exact="$Rec.$Preset == 'officer'"/>
+                  <signal_cue_instantly cue="md.EVE_Options.Bounty_Update_Progress" param="table[$IsGroup = true, $IsOfficer = $IsOfficer]"/>
+                  <set_value name="$Rec.$Reported" exact="true"/>
+                </do_elseif>
               </do_if>
             </do_for_each>
             <set_value name="parent.$ActiveGroups" exact="$NewActiveGroups"/>
@@ -565,6 +573,20 @@
 
               <set_value name="global.$EVEonlineinX4.$Score" operation="add" exact="$Score"/>
               <show_notification text="{35002,230}.[$Score, global.$EVEonlineinX4.$Score]"/>
+
+              <!-- Report to CONCORD Bounty Board -->
+              <set_value name="$VictimClass" exact="class.ship_s"/>
+              <do_if value="$Victim.isclass.ship_s"/>
+              <do_elseif value="$Victim.isclass.ship_m">
+                <set_value name="$VictimClass" exact="class.ship_m"/>
+              </do_elseif>
+              <do_elseif value="$Victim.isclass.ship_l">
+                <set_value name="$VictimClass" exact="class.ship_l"/>
+              </do_elseif>
+              <do_elseif value="$Victim.isclass.ship_xl">
+                <set_value name="$VictimClass" exact="class.ship_xl"/>
+              </do_elseif>
+              <signal_cue_instantly cue="md.EVE_Options.Bounty_Update_Progress" param="table[$Class = $VictimClass, $IsOfficer = $PresetData.$IsOfficer]"/>
 
               <do_if value="$Prefix != ''">
                 <show_notification text="{35002,31}.[$Prefix, $Victim.owner.knownname, $Bounty.formatted.{'%.s %Cr'}]"/>
