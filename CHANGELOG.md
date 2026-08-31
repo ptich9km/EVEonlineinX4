@@ -1,5 +1,20 @@
 # Changelog
 
+## [2.52] - 2026-08-31
+
+### Added
+- **CONCORD Bounty Board** in the Extension Options menu:
+  - Players can subscribe to / leave the bounty program.
+  - Up to 4 procedurally generated missions are offered at a time (kill S/M/L/XL ships, destroy a pirate group, or destroy an officer fleet).
+  - Missions auto-refresh every 30 minutes and expire after 2 hours.
+  - Taking a mission moves it to the active list; progress updates from pirate kills and destroyed groups.
+  - Rewards are paid in CONCORD points.
+- Mission progress hooks in `md/EVE_Spawner.xml`: single kills report ship class and officer status; wiped groups report a group kill.
+
+### Changed
+- Shortened `content.xml` description and added mention of the CONCORD Bounty Board and PLEX upgrades.
+- Extension Options menu labels for the Bounty Board now use plain English strings because SirNukes Simple Menu API does not resolve `{page,id}` references in menu widgets.
+
 ## [2.50] - 2026-08-27
 
 ### Added

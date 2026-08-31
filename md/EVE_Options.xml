@@ -164,20 +164,20 @@
         <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
         <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
             $col = 1, $colSpan = 2,
-            $text = '{35002,321}',
+            $text = 'CONCORD Bounty Board',
             $titleText = true
           ]"/>
 
         <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
         <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
             $col = 1,
-            $text = if global.$EVEonlineinX4.$BountySubscribed then '{35002,341}' else '{35002,333}'
+            $text = if global.$EVEonlineinX4.$BountySubscribed then 'Bounty program active' else 'Not subscribed'
           ]"/>
         <signal_cue_instantly cue="md.Simple_Menu_API.Make_Button" param="table[
             $col = 2,
             $onClick = if global.$EVEonlineinX4.$BountySubscribed then Bounty_Leave else Bounty_Join,
             $text = table[
-              $text = if global.$EVEonlineinX4.$BountySubscribed then '{35002,323}' else '{35002,322}',
+              $text = if global.$EVEonlineinX4.$BountySubscribed then 'Leave' else 'Join',
               $halign = 'center',
               $color = if global.$EVEonlineinX4.$BountySubscribed then 'Color.text_failure' else 'Color.text_success'
             ]
@@ -187,14 +187,14 @@
           <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
           <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
               $col = 1, $colSpan = 2,
-              $text = '{35002,325}',
+              $text = 'Available missions',
               $titleText = true
             ]"/>
           <do_if value="global.$EVEonlineinX4.$BountyMissions.count == 0">
             <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
             <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
                 $col = 1, $colSpan = 2,
-                $text = '{35002,330}'
+                $text = 'No missions available. New offers appear soon.'
               ]"/>
           </do_if>
           <do_else>
@@ -202,14 +202,14 @@
               <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
               <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
                   $col = 1,
-                  $text = $Mission.$Description + '\n' + '{35002,327}'.[$Mission.$Reward]
+                  $text = $Mission.$Description + '\nReward: ' + $Mission.$Reward + ' CONCORD points'
                 ]"/>
               <signal_cue_instantly cue="md.Simple_Menu_API.Make_Button" param="table[
                   $col = 2,
                   $onClick = Bounty_Take_Mission,
                   $echo = table[$MissionID = $Mission.$ID],
                   $text = table[
-                    $text = '{35002,328}',
+                    $text = 'Take',
                     $halign = 'center'
                   ]
                 ]"/>
@@ -219,7 +219,7 @@
                   $onClick = Bounty_Decline_Mission,
                   $echo = table[$MissionID = $Mission.$ID],
                   $text = table[
-                    $text = '{35002,329}',
+                    $text = 'Decline',
                     $halign = 'center'
                   ]
                 ]"/>
@@ -229,7 +229,7 @@
           <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
           <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
               $col = 1, $colSpan = 2,
-              $text = '{35002,326}',
+              $text = 'Active missions',
               $titleText = true
             ]"/>
           <do_if value="global.$EVEonlineinX4.$BountyActiveMissions.count == 0">
@@ -244,11 +244,11 @@
               <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
               <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
                   $col = 1,
-                  $text = $Mission.$Description + '\n' + '{35002,334}'.[$Mission.$Progress, $Mission.$Target]
+                  $text = $Mission.$Description + '\nProgress: ' + $Mission.$Progress + ' / ' + $Mission.$Target
                 ]"/>
               <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
                   $col = 2,
-                  $text = '{35002,327}'.[$Mission.$Reward],
+                  $text = 'Reward: ' + $Mission.$Reward + ' pts',
                   $halign = 'center'
                 ]"/>
             </do_for_each>
@@ -661,70 +661,60 @@
           <set_value name="$Target" exact="3"/>
           <set_value name="$Reward" exact="1"/>
           <set_value name="$IsOfficer" exact="false"/>
-          <set_value name="$DescKey" exact="338"/>
-          <set_value name="$ClassText" exact="''"/>
+          <set_value name="$Description" exact="'Destroy ' + 3 + ' EVE pirate ships'"/>
 
           <do_if value="$TypeRoll le 20">
             <set_value name="$Type" exact="'kill_s'"/>
             <set_value name="$Class" exact="class.ship_s"/>
             <set_value name="$Target" exact="[3,5].random"/>
             <set_value name="$Reward" exact="1 + $Target / 2"/>
-            <set_value name="$DescKey" exact="335"/>
-            <set_value name="$ClassText" exact="'S'"/>
+            <set_value name="$Description" exact="'Destroy ' + $Target + ' EVE pirate S ships'"/>
           </do_if>
           <do_elseif value="$TypeRoll le 40">
             <set_value name="$Type" exact="'kill_m'"/>
             <set_value name="$Class" exact="class.ship_m"/>
             <set_value name="$Target" exact="[2,4].random"/>
             <set_value name="$Reward" exact="2 + $Target"/>
-            <set_value name="$DescKey" exact="335"/>
-            <set_value name="$ClassText" exact="'M'"/>
+            <set_value name="$Description" exact="'Destroy ' + $Target + ' EVE pirate M ships'"/>
           </do_elseif>
           <do_elseif value="$TypeRoll le 55">
             <set_value name="$Type" exact="'kill_l'"/>
             <set_value name="$Class" exact="class.ship_l"/>
             <set_value name="$Target" exact="[1,2].random"/>
             <set_value name="$Reward" exact="4 + $Target * 2"/>
-            <set_value name="$DescKey" exact="335"/>
-            <set_value name="$ClassText" exact="'L'"/>
+            <set_value name="$Description" exact="'Destroy ' + $Target + ' EVE pirate L ships'"/>
           </do_elseif>
           <do_elseif value="$TypeRoll le 65">
             <set_value name="$Type" exact="'kill_xl'"/>
             <set_value name="$Class" exact="class.ship_xl"/>
             <set_value name="$Target" exact="1"/>
             <set_value name="$Reward" exact="10"/>
-            <set_value name="$DescKey" exact="335"/>
-            <set_value name="$ClassText" exact="'XL'"/>
+            <set_value name="$Description" exact="'Destroy 1 EVE pirate XL ship'"/>
           </do_elseif>
           <do_elseif value="$TypeRoll le 80">
             <set_value name="$Type" exact="'kill_group'"/>
             <set_value name="$Target" exact="1"/>
             <set_value name="$Reward" exact="5"/>
-            <set_value name="$DescKey" exact="336"/>
+            <set_value name="$Description" exact="'Destroy an EVE pirate group'"/>
           </do_elseif>
           <do_elseif value="$TypeRoll le 95">
             <set_value name="$Type" exact="'kill_any'"/>
             <set_value name="$Target" exact="[3,7].random"/>
             <set_value name="$Reward" exact="1 + $Target / 2"/>
-            <set_value name="$DescKey" exact="338"/>
+            <set_value name="$Description" exact="'Destroy ' + $Target + ' EVE pirate ships'"/>
           </do_elseif>
           <do_else>
             <set_value name="$Type" exact="'kill_officer'"/>
             <set_value name="$IsOfficer" exact="true"/>
             <set_value name="$Target" exact="1"/>
             <set_value name="$Reward" exact="15"/>
-            <set_value name="$DescKey" exact="337"/>
+            <set_value name="$Description" exact="'Destroy an EVE officer fleet'"/>
           </do_else>
 
           <do_if value="$ActiveIDs.{$MissionID}?">
             <!-- ID collision with active mission; skip this iteration -->
           </do_if>
           <do_else>
-            <set_value name="$Description" exact="'{35002,' + $DescKey + '}'"/>
-            <do_if value="$DescKey == 335">
-              <set_value name="$Description" exact="$Description.[$Target, $ClassText]"/>
-            </do_if>
-
             <append_to_list name="global.$EVEonlineinX4.$BountyMissions" exact="table[
               $ID = $MissionID,
               $Type = $Type,
