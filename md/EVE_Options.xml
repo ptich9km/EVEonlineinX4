@@ -228,7 +228,6 @@
                   $col = 1,
                   $text = $Mission.$Description + '\nReward: ' + $Mission.$Reward + ' CONCORD points'
                 ]"/>
-              <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" param="table[]"/>
               <signal_cue_instantly cue="md.Simple_Menu_API.Make_Button" param="table[
                   $col = 2,
                   $onClick = Bounty_Take_Mission,
@@ -236,17 +235,6 @@
                   $text = table[
                     $text = 'Take',
                     $color = 'Color.text_success',
-                    $halign = 'center'
-                  ]
-                ]"/>
-              <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" param="table[]"/>
-              <signal_cue_instantly cue="md.Simple_Menu_API.Make_Button" param="table[
-                  $col = 2,
-                  $onClick = Bounty_Decline_Mission,
-                  $echo = table[$MissionID = $Mission.$ID],
-                  $text = table[
-                    $text = 'Decline',
-                    $color = 'Color.text_failure',
                     $halign = 'center'
                   ]
                 ]"/>
@@ -284,6 +272,14 @@
         </do_if>
 
         <!-- Roleplay faction selector -->
+        <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" param="table[$selectable = false]"/>
+        <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+            $col = 1, $colSpan = 2,
+            $text = 'Roleplay faction',
+            $font = 'Helper.standardFontBold',
+            $color = 'Helper.color.blue'
+          ]"/>
+
         <set_value name="$FactionOptions" exact="[
           table[$text = 'Argon',     $faction = faction.argon],
           table[$text = 'Paranid',   $faction = faction.paranid],
@@ -653,23 +649,6 @@
           ]"/>
           <set_value name="global.$EVEonlineinX4.$BountyMissions" exact="$NewAvailable"/>
         </do_if>
-        <signal_cue_instantly cue="md.Simple_Menu_API.Refresh_Menu"/>
-      </actions>
-    </cue>
-
-    <cue name="Bounty_Decline_Mission" instantiate="true">
-      <conditions>
-        <event_cue_signalled/>
-      </conditions>
-      <actions>
-        <set_value name="$MissionID" exact="event.param.$echo.$MissionID"/>
-        <set_value name="$NewAvailable" exact="[]"/>
-        <do_for_each name="$Mission" in="global.$EVEonlineinX4.$BountyMissions">
-          <do_if value="$Mission.$ID != $MissionID">
-            <append_to_list name="$NewAvailable" exact="$Mission"/>
-          </do_if>
-        </do_for_each>
-        <set_value name="global.$EVEonlineinX4.$BountyMissions" exact="$NewAvailable"/>
         <signal_cue_instantly cue="md.Simple_Menu_API.Refresh_Menu"/>
       </actions>
     </cue>
