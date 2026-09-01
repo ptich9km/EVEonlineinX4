@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.54] - 2026-09-01
+
+### Changed
+- **Extension Options UI rework** using Simple Menu API best practices from Enhanced Kill Credit:
+  - Spawn toggle is now a `Make_CheckBox` instead of a cyclic button.
+  - Roleplay faction selector is now a `Make_Dropdown` with all playable factions.
+  - Bounty Board mission `Take` / `Decline` buttons now sit directly next to each other without an empty row between them.
+  - Section headers use bold blue text; labels are right-aligned; spacers are non-selectable.
+
 ## [2.52] - 2026-08-31
 
 ### Added

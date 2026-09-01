@@ -86,32 +86,42 @@
           ]"/>
 
         <!-- Spawn toggle -->
-        <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
+        <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" param="table[]"/>
         <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
             $col = 1,
             $text = 'Enable pirate spawning',
+            $halign = 'right',
             $mouseOverText = 'When ON, EVE pirate groups continue to spawn in Heretic\'s End. Turn OFF to stop new spawns. Already spawned groups remain.'
           ]"/>
-        <signal_cue_instantly cue="md.Simple_Menu_API.Make_Button" param="table[
+        <signal_cue_instantly cue="md.Simple_Menu_API.Make_CheckBox" param="table[
             $col = 2,
-            $onClick = Toggle_SpawnEnabled,
-            $text = table[
-              $text = if global.$EVEonlineinX4.$SpawnEnabled then 'ON' else 'OFF',
-              $color = if global.$EVEonlineinX4.$SpawnEnabled then 'Color.text_success' else 'Color.text_failure',
-              $halign = 'center'
-            ]
+            $id = 'spawn_enabled',
+            $checked = global.$EVEonlineinX4.$SpawnEnabled,
+            $width = 'Helper.standardButtonHeight',
+            $height = 'Helper.standardButtonHeight',
+            $onClick = On_SpawnEnabled_Changed,
+            $mouseOverText = 'When ON, EVE pirate groups continue to spawn in Heretic\'s End. Turn OFF to stop new spawns. Already spawned groups remain.'
           ]"/>
 
         <!-- Spacer -->
         <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
         <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[$col = 1, $colSpan = 2, $text = ' ']"/>
 
+        <!-- Spacer -->
+        <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" param="table[$selectable = false]"/>
+        <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+            $col = 1, $colSpan = 2,
+            $height = 'Helper.borderSize',
+            $fontsize = 1
+          ]"/>
+
         <!-- PLEX section -->
-        <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
+        <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" param="table[$selectable = false]"/>
         <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
             $col = 1, $colSpan = 2,
             $text = 'PLEX Upgrades',
-            $titleText = true
+            $font = 'Helper.standardFontBold',
+            $color = 'Helper.color.blue'
           ]"/>
 
         <set_value name="$Multiplier" exact="if global.$EVEonlineinX4.$GroupSizeMultiplier? then global.$EVEonlineinX4.$GroupSizeMultiplier else 1"/>
@@ -119,10 +129,11 @@
         <set_value name="$NextCost" exact="if $NextMultiplier == 2 then 1 else (if $NextMultiplier == 3 then 3 else (if $NextMultiplier == 5 then 6 else (if $NextMultiplier == 10 then 10 else 0)))"/>
         <set_value name="$UpgradeText" exact="if $Multiplier == 10 then 'Max reached' else 'Upgrade to x' + $NextMultiplier + ' (' + $NextCost + ' PLEX)'"/>
 
-        <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
+        <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" param="table[]"/>
         <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
             $col = 1,
-            $text = 'PLEX balance: ' + global.$EVEonlineinX4.$PLEXBalance
+            $text = 'PLEX balance: ' + global.$EVEonlineinX4.$PLEXBalance,
+            $halign = 'right'
           ]"/>
         <signal_cue_instantly cue="md.Simple_Menu_API.Make_Button" param="table[
             $col = 2,
@@ -133,10 +144,11 @@
             ]
           ]"/>
 
-        <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
+        <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" param="table[]"/>
         <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
             $col = 1,
-            $text = 'Group size multiplier: x' + $Multiplier
+            $text = 'Group size multiplier: x' + $Multiplier,
+            $halign = 'right'
           ]"/>
         <signal_cue_instantly cue="md.Simple_Menu_API.Make_Button" param="table[
             $col = 2,
@@ -148,30 +160,41 @@
           ]"/>
 
         <!-- Spacer -->
-        <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
-        <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[$col = 1, $colSpan = 2, $text = ' ']"/>
-
-        <!-- CONCORD score display -->
-        <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
+        <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" param="table[$selectable = false]"/>
         <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
             $col = 1, $colSpan = 2,
-            $text = 'CONCORD score: ' + global.$EVEonlineinX4.$Score
+            $height = 'Helper.borderSize',
+            $fontsize = 1
+          ]"/>
+
+        <!-- CONCORD score display -->
+        <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" param="table[]"/>
+        <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+            $col = 1, $colSpan = 2,
+            $text = 'CONCORD score: ' + global.$EVEonlineinX4.$Score,
+            $font = 'Helper.standardFontBold'
           ]"/>
 
         <!-- CONCORD Bounty Board -->
-        <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
-        <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[$col = 1, $colSpan = 2, $text = ' ']"/>
-        <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
+        <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" param="table[$selectable = false]"/>
+        <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+            $col = 1, $colSpan = 2,
+            $height = 'Helper.borderSize',
+            $fontsize = 1
+          ]"/>
+        <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" param="table[$selectable = false]"/>
         <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
             $col = 1, $colSpan = 2,
             $text = 'CONCORD Bounty Board',
-            $titleText = true
+            $font = 'Helper.standardFontBold',
+            $color = 'Helper.color.blue'
           ]"/>
 
-        <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
+        <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" param="table[]"/>
         <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
             $col = 1,
-            $text = if global.$EVEonlineinX4.$BountySubscribed then 'Bounty program active' else 'Not subscribed'
+            $text = if global.$EVEonlineinX4.$BountySubscribed then 'Bounty program active' else 'Not subscribed',
+            $halign = 'right'
           ]"/>
         <signal_cue_instantly cue="md.Simple_Menu_API.Make_Button" param="table[
             $col = 2,
@@ -184,14 +207,15 @@
           ]"/>
 
         <do_if value="global.$EVEonlineinX4.$BountySubscribed">
-          <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
+          <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" param="table[$selectable = false]"/>
           <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
               $col = 1, $colSpan = 2,
               $text = 'Available missions',
-              $titleText = true
+              $font = 'Helper.standardFontBold',
+              $color = 'Helper.color.blue'
             ]"/>
           <do_if value="global.$EVEonlineinX4.$BountyMissions.count == 0">
-            <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
+            <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" param="table[]"/>
             <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
                 $col = 1, $colSpan = 2,
                 $text = 'No missions available. New offers appear soon.'
@@ -199,41 +223,45 @@
           </do_if>
           <do_else>
             <do_for_each name="$Mission" in="global.$EVEonlineinX4.$BountyMissions">
-              <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
+              <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" param="table[]"/>
               <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
                   $col = 1,
                   $text = $Mission.$Description + '\nReward: ' + $Mission.$Reward + ' CONCORD points'
                 ]"/>
+              <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" param="table[]"/>
               <signal_cue_instantly cue="md.Simple_Menu_API.Make_Button" param="table[
                   $col = 2,
                   $onClick = Bounty_Take_Mission,
                   $echo = table[$MissionID = $Mission.$ID],
                   $text = table[
                     $text = 'Take',
+                    $color = 'Color.text_success',
                     $halign = 'center'
                   ]
                 ]"/>
-              <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
+              <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" param="table[]"/>
               <signal_cue_instantly cue="md.Simple_Menu_API.Make_Button" param="table[
                   $col = 2,
                   $onClick = Bounty_Decline_Mission,
                   $echo = table[$MissionID = $Mission.$ID],
                   $text = table[
                     $text = 'Decline',
+                    $color = 'Color.text_failure',
                     $halign = 'center'
                   ]
                 ]"/>
             </do_for_each>
           </do_else>
 
-          <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
+          <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" param="table[$selectable = false]"/>
           <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
               $col = 1, $colSpan = 2,
               $text = 'Active missions',
-              $titleText = true
+              $font = 'Helper.standardFontBold',
+              $color = 'Helper.color.blue'
             ]"/>
           <do_if value="global.$EVEonlineinX4.$BountyActiveMissions.count == 0">
-            <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
+            <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" param="table[]"/>
             <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
                 $col = 1, $colSpan = 2,
                 $text = '—'
@@ -241,7 +269,7 @@
           </do_if>
           <do_else>
             <do_for_each name="$Mission" in="global.$EVEonlineinX4.$BountyActiveMissions">
-              <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
+              <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" param="table[]"/>
               <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
                   $col = 1,
                   $text = $Mission.$Description + '\nProgress: ' + $Mission.$Progress + ' / ' + $Mission.$Target
@@ -256,36 +284,67 @@
         </do_if>
 
         <!-- Roleplay faction selector -->
-        <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
+        <set_value name="$FactionOptions" exact="[
+          table[$text = 'Argon',     $faction = faction.argon],
+          table[$text = 'Paranid',   $faction = faction.paranid],
+          table[$text = 'Teladi',    $faction = faction.teladi],
+          table[$text = 'Antigone',  $faction = faction.antigone],
+          table[$text = 'Free Split',$faction = faction.freesplit],
+          table[$text = 'Holy Order',$faction = faction.holyorder],
+          table[$text = 'Ministry',  $faction = faction.ministry],
+          table[$text = 'Pioneers',  $faction = faction.pioneers],
+          table[$text = 'Scale Plate',$faction = faction.scaleplate],
+          table[$text = 'Buccaneers',$faction = faction.buccaneers],
+          table[$text = 'Xenon',     $faction = faction.xenon],
+          table[$text = 'Split',     $faction = faction.split],
+          table[$text = 'Boron',     $faction = faction.boron],
+          table[$text = 'Terran',    $faction = faction.terran]
+        ]"/>
+        <set_value name="$FactionIndex" exact="0"/>
+        <do_all exact="$FactionOptions.count" counter="$fi">
+          <do_if value="$FactionOptions.{$fi}.$faction == global.$EVEonlineinX4.$RoleplayFaction">
+            <set_value name="$FactionIndex" exact="$fi"/>
+          </do_if>
+        </do_all>
+
+        <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" param="table[]"/>
         <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
             $col = 1,
-            $text = 'Roleplay faction'
+            $text = 'Roleplay faction',
+            $halign = 'right',
+            $mouseOverText = 'Faction used for CONCORD support ship hulls. Xenon and DLC factions fall back to Argon if the hull is unavailable.'
           ]"/>
-        <signal_cue_instantly cue="md.Simple_Menu_API.Make_Button" param="table[
+        <signal_cue_instantly cue="md.Simple_Menu_API.Make_Dropdown" param="table[
             $col = 2,
-            $onClick = Toggle_RoleplayFaction,
-            $text = table[
-              $text = global.$EVEonlineinX4.$RoleplayFaction.knownname,
-              $halign = 'center'
-            ]
+            $id = 'roleplay_faction',
+            $options = $FactionOptions,
+            $startOption = $FactionIndex,
+            $onDropDownConfirmed = On_RoleplayFaction_Changed,
+            $mouseOverText = 'Faction used for CONCORD support ship hulls. Xenon and DLC factions fall back to Argon if the hull is unavailable.'
           ]"/>
 
         <!-- Spacer -->
-        <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
-        <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[$col = 1, $colSpan = 2, $text = ' ']"/>
+        <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" param="table[$selectable = false]"/>
+        <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+            $col = 1, $colSpan = 2,
+            $height = 'Helper.borderSize',
+            $fontsize = 1
+          ]"/>
 
         <!-- Support ships section -->
-        <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
+        <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" param="table[$selectable = false]"/>
         <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
             $col = 1, $colSpan = 2,
             $text = 'Call CONCORD support ship',
-            $titleText = true
+            $font = 'Helper.standardFontBold',
+            $color = 'Helper.color.blue'
           ]"/>
 
-        <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
+        <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" param="table[]"/>
         <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
             $col = 1,
             $text = 'Abandoned S-class warship',
+            $halign = 'right',
             $mouseOverText = 'Cost: 10 CONCORD points'
           ]"/>
         <signal_cue_instantly cue="md.Simple_Menu_API.Make_Button" param="table[
@@ -297,10 +356,11 @@
             ]
           ]"/>
 
-        <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
+        <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" param="table[]"/>
         <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
             $col = 1,
             $text = 'Abandoned M-class warship',
+            $halign = 'right',
             $mouseOverText = 'Cost: 25 CONCORD points'
           ]"/>
         <signal_cue_instantly cue="md.Simple_Menu_API.Make_Button" param="table[
@@ -312,10 +372,11 @@
             ]
           ]"/>
 
-        <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row"/>
+        <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" param="table[]"/>
         <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
             $col = 1,
             $text = 'Abandoned L-class warship',
+            $halign = 'right',
             $mouseOverText = 'Cost: 100 CONCORD points'
           ]"/>
         <signal_cue_instantly cue="md.Simple_Menu_API.Make_Button" param="table[
@@ -329,27 +390,25 @@
       </actions>
     </cue>
 
-    <cue name="Toggle_SpawnEnabled" instantiate="true">
+    <cue name="On_SpawnEnabled_Changed" instantiate="true">
       <conditions>
         <event_cue_signalled/>
       </conditions>
       <actions>
-        <set_value name="global.$EVEonlineinX4.$SpawnEnabled" exact="not global.$EVEonlineinX4.$SpawnEnabled"/>
-        <debug_text text="'MOD: EVEonlineinX4 -- SpawnEnabled toggled to: ' + global.$EVEonlineinX4.$SpawnEnabled" context="false" filter="scripts"/>
+        <set_value name="global.$EVEonlineinX4.$SpawnEnabled" exact="event.param.$checked"/>
+        <debug_text text="'MOD: EVEonlineinX4 -- SpawnEnabled changed to: ' + global.$EVEonlineinX4.$SpawnEnabled" context="false" filter="scripts"/>
         <signal_cue_instantly cue="md.Simple_Menu_API.Refresh_Menu"/>
       </actions>
     </cue>
 
-    <cue name="Toggle_RoleplayFaction" instantiate="true">
+    <cue name="On_RoleplayFaction_Changed" instantiate="true">
       <conditions>
         <event_cue_signalled/>
       </conditions>
       <actions>
-        <set_value name="$FactionList" exact="[faction.argon, faction.paranid, faction.teladi, faction.antigone, faction.freesplit, faction.holyorder, faction.ministry, faction.pioneers, faction.scaleplate, faction.buccaneers, faction.xenon, faction.split, faction.boron, faction.terran]"/>
-        <set_value name="$NextIndex" exact="(global.$EVEonlineinX4.$RoleplayFactionIndex + 1) % $FactionList.count"/>
-        <set_value name="global.$EVEonlineinX4.$RoleplayFactionIndex" exact="$NextIndex"/>
-        <set_value name="global.$EVEonlineinX4.$RoleplayFaction" exact="$FactionList.{$NextIndex}"/>
-        <debug_text text="'MOD: EVEonlineinX4 -- RoleplayFaction toggled to: ' + global.$EVEonlineinX4.$RoleplayFaction.knownname" context="false" filter="scripts"/>
+        <set_value name="global.$EVEonlineinX4.$RoleplayFaction" exact="event.param.$option.$faction"/>
+        <set_value name="global.$EVEonlineinX4.$RoleplayFactionIndex" exact="event.param.$option_index - 1"/>
+        <debug_text text="'MOD: EVEonlineinX4 -- RoleplayFaction changed to: ' + global.$EVEonlineinX4.$RoleplayFaction.knownname" context="false" filter="scripts"/>
         <show_notification text="{35002,231}.[global.$EVEonlineinX4.$RoleplayFaction.knownname]"/>
         <signal_cue_instantly cue="md.Simple_Menu_API.Refresh_Menu"/>
       </actions>
