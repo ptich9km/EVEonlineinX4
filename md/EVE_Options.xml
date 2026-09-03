@@ -743,7 +743,8 @@
             </run_actions>
 
             <do_if value="$ShipDef?">
-              <create_ship name="$Support" sector="$Sector" ref="$ShipDef" capturable="true">
+              <!-- Vanilla reward pattern: FindShipMacroForCargo returns a macro object; pass it to create_ship macro= directly. -->
+              <create_ship name="$Support" sector="$Sector" macro="$ShipDef" capturable="true">
                 <owner exact="faction.ownerless"/>
                 <loadout>
                   <level exact="1.0" faction="faction.argon"/>
