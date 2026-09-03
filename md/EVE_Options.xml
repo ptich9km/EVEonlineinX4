@@ -403,14 +403,9 @@
         <!-- Prices are integer CONC points: per-1k-unit price (market x1.5 at 500k Cr/point, rounded up) + hauler cost. -->
         <set_value name="$SupplyWares" exact="[
           table[$text = 'Energy Cells',     $ware = ware.energycells,    $perk = 1],
-          table[$text = 'Ore',              $ware = ware.ore,            $perk = 1],
-          table[$text = 'Silicon Wafers',   $ware = ware.siliconwafers,  $perk = 1],
-          table[$text = 'Ice',              $ware = ware.ice,            $perk = 1],
-          table[$text = 'Food Rations',     $ware = ware.foodrations,    $perk = 1],
-          table[$text = 'Composites',       $ware = ware.composites,     $perk = 4],
+          table[$text = 'Water',            $ware = ware.water,          $perk = 1],
           table[$text = 'Hull Parts',       $ware = ware.hullparts,      $perk = 5],
-          table[$text = 'Claytronics',      $ware = ware.claytronics,    $perk = 12],
-          table[$text = 'Nividium',         $ware = ware.nividium,       $perk = 105]
+          table[$text = 'Claytronics',      $ware = ware.claytronics,    $perk = 12]
         ]"/>
         <set_value name="$SupplySizes" exact="[
           table[$text = 'Small (1,000 units)',  $amount = 1000, $kmul = 1, $shipcost = 8],
@@ -718,14 +713,9 @@
         <set_value name="$SizeIdx" exact="if global.$EVEonlineinX4.$SupplySizeIndex? then global.$EVEonlineinX4.$SupplySizeIndex else 2"/>
         <set_value name="$SupplyWares" exact="[
           table[$text = 'Energy Cells',     $ware = ware.energycells,    $perk = 1],
-          table[$text = 'Ore',              $ware = ware.ore,            $perk = 1],
-          table[$text = 'Silicon Wafers',   $ware = ware.siliconwafers,  $perk = 1],
-          table[$text = 'Ice',              $ware = ware.ice,            $perk = 1],
-          table[$text = 'Food Rations',     $ware = ware.foodrations,    $perk = 1],
-          table[$text = 'Composites',       $ware = ware.composites,     $perk = 4],
+          table[$text = 'Water',            $ware = ware.water,          $perk = 1],
           table[$text = 'Hull Parts',       $ware = ware.hullparts,      $perk = 5],
-          table[$text = 'Claytronics',      $ware = ware.claytronics,    $perk = 12],
-          table[$text = 'Nividium',         $ware = ware.nividium,       $perk = 105]
+          table[$text = 'Claytronics',      $ware = ware.claytronics,    $perk = 12]
         ]"/>
         <set_value name="$SupplySizes" exact="[
           table[$text = 'Small (1,000 units)',  $amount = 1000, $kmul = 1, $shipcost = 8],
