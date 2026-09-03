@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.56] - 2026-09-03
+
+### Added
+- **CONCORD Resource Supply**: buy station-building cargo (energy cells, ore, silicon, ice, food, composites, hull parts, claytronics, nividium) delivered by an abandoned Argon hauler spawned next to the player. Uses the vanilla `md.LIB_Generic.FindShipMacroForCargo` logic to pick a hauler that fits the shipment. Prices are integer CONC points: per-1k-unit price (≈ market x1.5 at 500k Cr per point) + the hauler itself, which the player keeps.
+
+### Changed
+- All CONCORD-purchased ships (support warships and supply haulers) now spawn with `<pilot actor="null"/>`.
+
 ## [2.55] - 2026-09-01
 
 ### Changed

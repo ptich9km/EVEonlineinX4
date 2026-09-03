@@ -75,5 +75,7 @@
     <t id="339">New missions available.</t>
     <t id="340">Subscription requires friendly reputation with CONCORD.</t>
     <t id="341">CONCORD Bounty Program active.</t>
+    <t id="342">CONCORD hauler spawned nearby with your cargo.</t>
+    <t id="343">Failed to find a suitable hauler.</t>
   </page>
 </language>

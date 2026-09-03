@@ -54,5 +54,7 @@
     <t id="313">Not enough PLEX (%s / %s)</t>
     <t id="314">Group size multiplier upgraded to x%s</t>
     <t id="320">Max reached</t>
+    <t id="342">CONCORD hauler spawned nearby with your cargo.</t>
+    <t id="343">Failed to find a suitable hauler.</t>
   </page>
 </language>

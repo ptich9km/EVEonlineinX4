@@ -53,6 +53,13 @@
         <do_if value="not global.$EVEonlineinX4.$BountyLastRefresh?">
           <set_value name="global.$EVEonlineinX4.$BountyLastRefresh" exact="0s"/>
         </do_if>
+        <!-- CONCORD Resource Supply selection -->
+        <do_if value="not global.$EVEonlineinX4.$SupplyWareIndex?">
+          <set_value name="global.$EVEonlineinX4.$SupplyWareIndex" exact="1"/>
+        </do_if>
+        <do_if value="not global.$EVEonlineinX4.$SupplySizeIndex?">
+          <set_value name="global.$EVEonlineinX4.$SupplySizeIndex" exact="2"/>
+        </do_if>
         <debug_text text="'MOD: EVEonlineinX4 -- global state initialized. SpawnEnabled=' + global.$EVEonlineinX4.$SpawnEnabled + ' Score=' + global.$EVEonlineinX4.$Score + ' RoleplayFaction=' + global.$EVEonlineinX4.$RoleplayFaction.knownname" context="false" filter="scripts"/>
       </actions>
     </cue>
@@ -383,6 +390,92 @@
               $halign = 'center'
             ]
           ]"/>
+
+        <!-- Spacer -->
+        <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" param="table[$selectable = false]"/>
+        <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+            $col = 1, $colSpan = 2,
+            $height = 'Helper.borderSize',
+            $fontsize = 1
+          ]"/>
+
+        <!-- CONCORD Resource Supply: buy cargo delivered in an abandoned hauler -->
+        <!-- Prices are integer CONC points: per-1k-unit price (market x1.5 at 500k Cr/point, rounded up) + hauler cost. -->
+        <set_value name="$SupplyWares" exact="[
+          table[$text = 'Energy Cells',     $ware = ware.energycells,    $perk = 1],
+          table[$text = 'Ore',              $ware = ware.ore,            $perk = 1],
+          table[$text = 'Silicon Wafers',   $ware = ware.siliconwafers,  $perk = 1],
+          table[$text = 'Ice',              $ware = ware.ice,            $perk = 1],
+          table[$text = 'Food Rations',     $ware = ware.foodrations,    $perk = 1],
+          table[$text = 'Composites',       $ware = ware.composites,     $perk = 4],
+          table[$text = 'Hull Parts',       $ware = ware.hullparts,      $perk = 5],
+          table[$text = 'Claytronics',      $ware = ware.claytronics,    $perk = 12],
+          table[$text = 'Nividium',         $ware = ware.nividium,       $perk = 105]
+        ]"/>
+        <set_value name="$SupplySizes" exact="[
+          table[$text = 'Small (1,000 units)',  $amount = 1000, $kmul = 1, $shipcost = 8],
+          table[$text = 'Medium (3,000 units)', $amount = 3000, $kmul = 3, $shipcost = 20],
+          table[$text = 'Large (8,000 units)',  $amount = 8000, $kmul = 8, $shipcost = 80]
+        ]"/>
+        <set_value name="$WareIdx" exact="if global.$EVEonlineinX4.$SupplyWareIndex? then global.$EVEonlineinX4.$SupplyWareIndex else 1"/>
+        <set_value name="$SizeIdx" exact="if global.$EVEonlineinX4.$SupplySizeIndex? then global.$EVEonlineinX4.$SupplySizeIndex else 2"/>
+        <set_value name="$SupplyCost" exact="$SupplyWares.{$WareIdx}.$perk * $SupplySizes.{$SizeIdx}.$kmul + $SupplySizes.{$SizeIdx}.$shipcost"/>
+
+        <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" param="table[$selectable = false]"/>
+        <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+            $col = 1, $colSpan = 2,
+            $text = 'CONCORD Resource Supply',
+            $font = 'Helper.standardFontBold',
+            $color = 'Helper.color.blue'
+          ]"/>
+
+        <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" param="table[]"/>
+        <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+            $col = 1,
+            $text = 'Resource',
+            $halign = 'right',
+            $mouseOverText = 'Cargo ware delivered by an abandoned CONCORD hauler next to your ship. The hauler is yours to keep.'
+          ]"/>
+        <signal_cue_instantly cue="md.Simple_Menu_API.Make_Dropdown" param="table[
+            $col = 2,
+            $id = 'supply_ware',
+            $options = $SupplyWares,
+            $startOption = $WareIdx,
+            $onDropDownConfirmed = On_SupplyWare_Changed,
+            $mouseOverText = 'Cargo ware delivered by an abandoned CONCORD hauler next to your ship. The hauler is yours to keep.'
+          ]"/>
+
+        <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" param="table[]"/>
+        <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+            $col = 1,
+            $text = 'Shipment size',
+            $halign = 'right',
+            $mouseOverText = 'Larger shipments need a bigger hauler and cost more.'
+          ]"/>
+        <signal_cue_instantly cue="md.Simple_Menu_API.Make_Dropdown" param="table[
+            $col = 2,
+            $id = 'supply_size',
+            $options = $SupplySizes,
+            $startOption = $SizeIdx,
+            $onDropDownConfirmed = On_SupplySize_Changed,
+            $mouseOverText = 'Larger shipments need a bigger hauler and cost more.'
+          ]"/>
+
+        <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" param="table[]"/>
+        <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
+            $col = 1,
+            $text = 'Cost: ' + $SupplyCost + ' CONCORD points (cargo + hauler)',
+            $halign = 'right',
+            $mouseOverText = 'Price includes the cargo at a 50% markup over market plus the hauler, which stays with you.'
+          ]"/>
+        <signal_cue_instantly cue="md.Simple_Menu_API.Make_Button" param="table[
+            $col = 2,
+            $onClick = Order_Supply,
+            $text = table[
+              $text = 'Order (' + $SupplyCost + ' pts)',
+              $halign = 'center'
+            ]
+          ]"/>
       </actions>
     </cue>
 
@@ -567,6 +660,7 @@
                   <loadout>
                     <level exact="1.0" faction="$ShipFaction"/>
                   </loadout>
+                  <pilot actor="null"/>
                   <safepos value="$SpawnPos"/>
                 </create_ship>
                 <debug_text text="'MOD: EVEonlineinX4 -- Call_Support: support exists=' + $Support.exists" context="false" filter="scripts"/>
@@ -583,6 +677,105 @@
                 <show_notification text="{35002,228}"/>
               </do_else>
             </do_elseif>
+          </do_if>
+          <do_else>
+            <show_notification text="{35002,229}"/>
+          </do_else>
+
+          <signal_cue_instantly cue="md.Simple_Menu_API.Refresh_Menu"/>
+        </do_else>
+      </actions>
+    </cue>
+
+    <!-- CONCORD Resource Supply: dropdown callbacks -->
+    <cue name="On_SupplyWare_Changed" instantiate="true">
+      <conditions>
+        <event_cue_signalled/>
+      </conditions>
+      <actions>
+        <set_value name="global.$EVEonlineinX4.$SupplyWareIndex" exact="event.param.$option_index"/>
+        <signal_cue_instantly cue="md.Simple_Menu_API.Refresh_Menu"/>
+      </actions>
+    </cue>
+
+    <cue name="On_SupplySize_Changed" instantiate="true">
+      <conditions>
+        <event_cue_signalled/>
+      </conditions>
+      <actions>
+        <set_value name="global.$EVEonlineinX4.$SupplySizeIndex" exact="event.param.$option_index"/>
+        <signal_cue_instantly cue="md.Simple_Menu_API.Refresh_Menu"/>
+      </actions>
+    </cue>
+
+    <!-- CONCORD Resource Supply: order a cargo hauler like the vanilla war-subscription reward -->
+    <cue name="Order_Supply" instantiate="true">
+      <conditions>
+        <event_cue_signalled/>
+      </conditions>
+      <actions>
+        <set_value name="$WareIdx" exact="if global.$EVEonlineinX4.$SupplyWareIndex? then global.$EVEonlineinX4.$SupplyWareIndex else 1"/>
+        <set_value name="$SizeIdx" exact="if global.$EVEonlineinX4.$SupplySizeIndex? then global.$EVEonlineinX4.$SupplySizeIndex else 2"/>
+        <set_value name="$SupplyWares" exact="[
+          table[$text = 'Energy Cells',     $ware = ware.energycells,    $perk = 1],
+          table[$text = 'Ore',              $ware = ware.ore,            $perk = 1],
+          table[$text = 'Silicon Wafers',   $ware = ware.siliconwafers,  $perk = 1],
+          table[$text = 'Ice',              $ware = ware.ice,            $perk = 1],
+          table[$text = 'Food Rations',     $ware = ware.foodrations,    $perk = 1],
+          table[$text = 'Composites',       $ware = ware.composites,     $perk = 4],
+          table[$text = 'Hull Parts',       $ware = ware.hullparts,      $perk = 5],
+          table[$text = 'Claytronics',      $ware = ware.claytronics,    $perk = 12],
+          table[$text = 'Nividium',         $ware = ware.nividium,       $perk = 105]
+        ]"/>
+        <set_value name="$SupplySizes" exact="[
+          table[$text = 'Small (1,000 units)',  $amount = 1000, $kmul = 1, $shipcost = 8],
+          table[$text = 'Medium (3,000 units)', $amount = 3000, $kmul = 3, $shipcost = 20],
+          table[$text = 'Large (8,000 units)',  $amount = 8000, $kmul = 8, $shipcost = 80]
+        ]"/>
+        <set_value name="$Ware" exact="$SupplyWares.{$WareIdx}.$ware"/>
+        <set_value name="$Amount" exact="$SupplySizes.{$SizeIdx}.$amount"/>
+        <set_value name="$Cost" exact="$SupplyWares.{$WareIdx}.$perk * $SupplySizes.{$SizeIdx}.$kmul + $SupplySizes.{$SizeIdx}.$shipcost"/>
+
+        <do_if value="global.$EVEonlineinX4.$Score lt $Cost">
+          <show_notification text="{35002,226}.[global.$EVEonlineinX4.$Score, $Cost]"/>
+          <signal_cue_instantly cue="md.Simple_Menu_API.Refresh_Menu"/>
+        </do_if>
+        <do_else>
+          <do_if value="player.occupiedship.exists and player.occupiedship.sector.exists">
+            <set_value name="$Sector" exact="player.occupiedship.sector"/>
+            <get_safe_pos result="$SpawnPos" sector="$Sector" object="player.occupiedship" radius="5km"/>
+
+            <!-- Vanilla approach: pick a hauler whose cargo bay fits the shipment (x4ep1 war missions). -->
+            <set_value name="$shipcargo" exact="[[$Amount, $Ware]]"/>
+            <run_actions ref="md.LIB_Generic.FindShipMacroForCargo" result="$ShipDef">
+              <param name="shipcargo" value="$shipcargo"/>
+              <param name="Faction" value="faction.argon"/>
+            </run_actions>
+
+            <do_if value="$ShipDef?">
+              <create_ship name="$Support" sector="$Sector" ref="$ShipDef" capturable="true">
+                <owner exact="faction.ownerless"/>
+                <loadout>
+                  <level exact="1.0" faction="faction.argon"/>
+                </loadout>
+                <pilot actor="null"/>
+                <safepos value="$SpawnPos"/>
+              </create_ship>
+              <debug_text text="'MOD: EVEonlineinX4 -- Order_Supply: ship exists=' + $Support.exists" context="false" filter="scripts"/>
+
+              <do_if value="$Support.exists">
+                <add_cargo object="$Support" ware="$Ware" exact="$Amount"/>
+                <set_known object="$Support" known="true"/>
+                <set_value name="global.$EVEonlineinX4.$Score" operation="subtract" exact="$Cost"/>
+                <show_notification text="{35002,342}"/>
+              </do_if>
+              <do_else>
+                <show_notification text="{35002,343}"/>
+              </do_else>
+            </do_if>
+            <do_else>
+              <show_notification text="{35002,343}"/>
+            </do_else>
           </do_if>
           <do_else>
             <show_notification text="{35002,229}"/>
