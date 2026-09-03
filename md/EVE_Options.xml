@@ -755,7 +755,7 @@
             <create_ship name="$Support" sector="$Sector" macro="'ship_arg_m_trans_container_02_a_macro'" capturable="true">
               <owner exact="faction.ownerless"/>
               <loadout>
-                <level exact="1.0" faction="faction.argon"/>
+                <level exact="0.5" faction="faction.argon"/>
               </loadout>
               <pilot actor="null"/>
               <safepos value="$SpawnPos"/>

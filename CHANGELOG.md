@@ -1,5 +1,10 @@
 # Changelog
 
+## [2.60] - 2026-09-03
+
+### Changed
+- CONCORD Resource Supply hauler now spawns with loadout level 0.5 instead of 1.0 (less equipment on the free hauler).
+
 ## [2.59] - 2026-09-03
 
 ### Changed
