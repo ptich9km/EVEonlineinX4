@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.59] - 2026-09-03
+
+### Changed
+- **CONCORD Resource Supply rework**: every order now spawns a fixed Vulture Vanguard (M, 12,080 m³ hold) instead of the vanilla `FindShipMacroForCargo` picker, which had been sending L-class capital ships.
+- Wares limited to **Energy Cells, Water, Hull Parts, Claytronics**; party amounts sized to fit the hold (EC 3,000/6,000/12,000; Water 500/1,000/2,000; Hull Parts 250/500/1,000; Claytronics 60/125/250), all integer. Cost = cargo (market x1.5 at 500k Cr per point) + 10 points for the hauler.
+
 ## [2.56] - 2026-09-03
 
 ### Added

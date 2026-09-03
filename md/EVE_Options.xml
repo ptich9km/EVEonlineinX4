@@ -399,22 +399,30 @@
             $fontsize = 1
           ]"/>
 
-        <!-- CONCORD Resource Supply: buy cargo delivered in an abandoned hauler -->
-        <!-- Prices are integer CONC points: per-1k-unit price (market x1.5 at 500k Cr/point, rounded up) + hauler cost. -->
+        <!-- CONCORD Resource Supply: buy cargo delivered in an abandoned Vulture Vanguard (M, 12,080 m3 hold). -->
+        <!-- Party amounts fit the hold: EC x1 m3, Water x6, Hull Parts x12, Claytronics x48. -->
+        <!-- Cost = cargo (market x1.5 at 500k Cr per point, rounded up) + 10 pts for the hauler. -->
         <set_value name="$SupplyWares" exact="[
-          table[$text = 'Energy Cells',     $ware = ware.energycells,    $perk = 1],
-          table[$text = 'Water',            $ware = ware.water,          $perk = 1],
-          table[$text = 'Hull Parts',       $ware = ware.hullparts,      $perk = 5],
-          table[$text = 'Claytronics',      $ware = ware.claytronics,    $perk = 12]
-        ]"/>
-        <set_value name="$SupplySizes" exact="[
-          table[$text = 'Small (1,000 units)',  $amount = 1000, $kmul = 1, $shipcost = 8],
-          table[$text = 'Medium (3,000 units)', $amount = 3000, $kmul = 3, $shipcost = 20],
-          table[$text = 'Large (8,000 units)',  $amount = 8000, $kmul = 8, $shipcost = 80]
+          table[$text = 'Energy Cells', $ware = ware.energycells, $sizes = [
+            table[$text = 'Small (3,000 units)',   $amount = 3000,  $cost = 11],
+            table[$text = 'Medium (6,000 units)',  $amount = 6000,  $cost = 11],
+            table[$text = 'Large (12,000 units)',  $amount = 12000, $cost = 11]]],
+          table[$text = 'Water', $ware = ware.water, $sizes = [
+            table[$text = 'Small (500 units)',     $amount = 500,   $cost = 11],
+            table[$text = 'Medium (1,000 units)',  $amount = 1000,  $cost = 11],
+            table[$text = 'Large (2,000 units)',   $amount = 2000,  $cost = 11]]],
+          table[$text = 'Hull Parts', $ware = ware.hullparts, $sizes = [
+            table[$text = 'Small (250 units)',     $amount = 250,   $cost = 12],
+            table[$text = 'Medium (500 units)',    $amount = 500,   $cost = 13],
+            table[$text = 'Large (1,000 units)',   $amount = 1000,  $cost = 15]]],
+          table[$text = 'Claytronics', $ware = ware.claytronics, $sizes = [
+            table[$text = 'Small (60 units)',      $amount = 60,    $cost = 11],
+            table[$text = 'Medium (125 units)',    $amount = 125,   $cost = 12],
+            table[$text = 'Large (250 units)',     $amount = 250,   $cost = 13]]]
         ]"/>
         <set_value name="$WareIdx" exact="if global.$EVEonlineinX4.$SupplyWareIndex? then global.$EVEonlineinX4.$SupplyWareIndex else 1"/>
         <set_value name="$SizeIdx" exact="if global.$EVEonlineinX4.$SupplySizeIndex? then global.$EVEonlineinX4.$SupplySizeIndex else 2"/>
-        <set_value name="$SupplyCost" exact="$SupplyWares.{$WareIdx}.$perk * $SupplySizes.{$SizeIdx}.$kmul + $SupplySizes.{$SizeIdx}.$shipcost"/>
+        <set_value name="$SupplyCost" exact="$SupplyWares.{$WareIdx}.$sizes.{$SizeIdx}.$cost"/>
 
         <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" param="table[$selectable = false]"/>
         <signal_cue_instantly cue="md.Simple_Menu_API.Make_Text" param="table[
@@ -445,15 +453,15 @@
             $col = 1,
             $text = 'Shipment size',
             $halign = 'right',
-            $mouseOverText = 'Larger shipments need a bigger hauler and cost more.'
+            $mouseOverText = 'All shipments fit a single Vulture Vanguard (M, 12,080 m3 hold). Larger shipments just cost more.'
           ]"/>
         <signal_cue_instantly cue="md.Simple_Menu_API.Make_Dropdown" param="table[
             $col = 2,
             $id = 'supply_size',
-            $options = $SupplySizes,
+            $options = $SupplyWares.{$WareIdx}.$sizes,
             $startOption = $SizeIdx,
             $onDropDownConfirmed = On_SupplySize_Changed,
-            $mouseOverText = 'Larger shipments need a bigger hauler and cost more.'
+            $mouseOverText = 'All shipments fit a single Vulture Vanguard (M, 12,080 m3 hold). Larger shipments just cost more.'
           ]"/>
 
         <signal_cue_instantly cue="md.Simple_Menu_API.Add_Row" param="table[]"/>
@@ -711,20 +719,28 @@
       <actions>
         <set_value name="$WareIdx" exact="if global.$EVEonlineinX4.$SupplyWareIndex? then global.$EVEonlineinX4.$SupplyWareIndex else 1"/>
         <set_value name="$SizeIdx" exact="if global.$EVEonlineinX4.$SupplySizeIndex? then global.$EVEonlineinX4.$SupplySizeIndex else 2"/>
+        <!-- Same table as BuildOptions: resource -> sizes -> amount/cost. -->
         <set_value name="$SupplyWares" exact="[
-          table[$text = 'Energy Cells',     $ware = ware.energycells,    $perk = 1],
-          table[$text = 'Water',            $ware = ware.water,          $perk = 1],
-          table[$text = 'Hull Parts',       $ware = ware.hullparts,      $perk = 5],
-          table[$text = 'Claytronics',      $ware = ware.claytronics,    $perk = 12]
-        ]"/>
-        <set_value name="$SupplySizes" exact="[
-          table[$text = 'Small (1,000 units)',  $amount = 1000, $kmul = 1, $shipcost = 8],
-          table[$text = 'Medium (3,000 units)', $amount = 3000, $kmul = 3, $shipcost = 20],
-          table[$text = 'Large (8,000 units)',  $amount = 8000, $kmul = 8, $shipcost = 80]
+          table[$text = 'Energy Cells', $ware = ware.energycells, $sizes = [
+            table[$text = 'Small (3,000 units)',   $amount = 3000,  $cost = 11],
+            table[$text = 'Medium (6,000 units)',  $amount = 6000,  $cost = 11],
+            table[$text = 'Large (12,000 units)',  $amount = 12000, $cost = 11]]],
+          table[$text = 'Water', $ware = ware.water, $sizes = [
+            table[$text = 'Small (500 units)',     $amount = 500,   $cost = 11],
+            table[$text = 'Medium (1,000 units)',  $amount = 1000,  $cost = 11],
+            table[$text = 'Large (2,000 units)',   $amount = 2000,  $cost = 11]]],
+          table[$text = 'Hull Parts', $ware = ware.hullparts, $sizes = [
+            table[$text = 'Small (250 units)',     $amount = 250,   $cost = 12],
+            table[$text = 'Medium (500 units)',    $amount = 500,   $cost = 13],
+            table[$text = 'Large (1,000 units)',   $amount = 1000,  $cost = 15]]],
+          table[$text = 'Claytronics', $ware = ware.claytronics, $sizes = [
+            table[$text = 'Small (60 units)',      $amount = 60,    $cost = 11],
+            table[$text = 'Medium (125 units)',    $amount = 125,   $cost = 12],
+            table[$text = 'Large (250 units)',     $amount = 250,   $cost = 13]]]
         ]"/>
         <set_value name="$Ware" exact="$SupplyWares.{$WareIdx}.$ware"/>
-        <set_value name="$Amount" exact="$SupplySizes.{$SizeIdx}.$amount"/>
-        <set_value name="$Cost" exact="$SupplyWares.{$WareIdx}.$perk * $SupplySizes.{$SizeIdx}.$kmul + $SupplySizes.{$SizeIdx}.$shipcost"/>
+        <set_value name="$Amount" exact="$SupplyWares.{$WareIdx}.$sizes.{$SizeIdx}.$amount"/>
+        <set_value name="$Cost" exact="$SupplyWares.{$WareIdx}.$sizes.{$SizeIdx}.$cost"/>
 
         <do_if value="global.$EVEonlineinX4.$Score lt $Cost">
           <show_notification text="{35002,226}.[global.$EVEonlineinX4.$Score, $Cost]"/>
@@ -735,34 +751,22 @@
             <set_value name="$Sector" exact="player.occupiedship.sector"/>
             <get_safe_pos result="$SpawnPos" sector="$Sector" object="player.occupiedship" radius="5km"/>
 
-            <!-- Vanilla approach: pick a hauler whose cargo bay fits the shipment (x4ep1 war missions). -->
-            <set_value name="$shipcargo" exact="[[$Amount, $Ware]]"/>
-            <run_actions ref="md.LIB_Generic.FindShipMacroForCargo" result="$ShipDef">
-              <param name="shipcargo" value="$shipcargo"/>
-              <param name="Faction" value="faction.argon"/>
-            </run_actions>
+            <!-- Fixed hauler: Vulture Vanguard (M, 12,080 m3 hold) fits every party above. -->
+            <create_ship name="$Support" sector="$Sector" macro="'ship_arg_m_trans_container_02_a_macro'" capturable="true">
+              <owner exact="faction.ownerless"/>
+              <loadout>
+                <level exact="1.0" faction="faction.argon"/>
+              </loadout>
+              <pilot actor="null"/>
+              <safepos value="$SpawnPos"/>
+            </create_ship>
+            <debug_text text="'MOD: EVEonlineinX4 -- Order_Supply: ship exists=' + $Support.exists" context="false" filter="scripts"/>
 
-            <do_if value="$ShipDef?">
-              <!-- Vanilla reward pattern: FindShipMacroForCargo returns a macro object; pass it to create_ship macro= directly. -->
-              <create_ship name="$Support" sector="$Sector" macro="$ShipDef" capturable="true">
-                <owner exact="faction.ownerless"/>
-                <loadout>
-                  <level exact="1.0" faction="faction.argon"/>
-                </loadout>
-                <pilot actor="null"/>
-                <safepos value="$SpawnPos"/>
-              </create_ship>
-              <debug_text text="'MOD: EVEonlineinX4 -- Order_Supply: ship exists=' + $Support.exists" context="false" filter="scripts"/>
-
-              <do_if value="$Support.exists">
-                <add_cargo object="$Support" ware="$Ware" exact="$Amount"/>
-                <set_known object="$Support" known="true"/>
-                <set_value name="global.$EVEonlineinX4.$Score" operation="subtract" exact="$Cost"/>
-                <show_notification text="{35002,342}"/>
-              </do_if>
-              <do_else>
-                <show_notification text="{35002,343}"/>
-              </do_else>
+            <do_if value="$Support.exists">
+              <add_cargo object="$Support" ware="$Ware" exact="$Amount"/>
+              <set_known object="$Support" known="true"/>
+              <set_value name="global.$EVEonlineinX4.$Score" operation="subtract" exact="$Cost"/>
+              <show_notification text="{35002,342}"/>
             </do_if>
             <do_else>
               <show_notification text="{35002,343}"/>
