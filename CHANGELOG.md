@@ -1,5 +1,10 @@
 # Changelog
 
+## [2.61] - 2026-09-04
+
+### Fixed
+- CONCORD Resource Supply hauler is now the Teladi **Vulture Vanguard** (`ship_tel_m_trans_container_01_a_macro`, 12,080 m³ hold) instead of the smaller Argon Ides; loadout faction switched to Teladi.
+
 ## [2.60] - 2026-09-03
 
 ### Changed

@@ -752,10 +752,10 @@
             <get_safe_pos result="$SpawnPos" sector="$Sector" object="player.occupiedship" radius="5km"/>
 
             <!-- Fixed hauler: Vulture Vanguard (M, 12,080 m3 hold) fits every party above. -->
-            <create_ship name="$Support" sector="$Sector" macro="'ship_arg_m_trans_container_02_a_macro'" capturable="true">
+            <create_ship name="$Support" sector="$Sector" macro="'ship_tel_m_trans_container_01_a_macro'" capturable="true">
               <owner exact="faction.ownerless"/>
               <loadout>
-                <level exact="0.5" faction="faction.argon"/>
+                <level exact="0.5" faction="faction.teladi"/>
               </loadout>
               <pilot actor="null"/>
               <safepos value="$SpawnPos"/>
